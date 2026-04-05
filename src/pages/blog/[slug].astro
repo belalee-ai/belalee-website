@@ -1,0 +1,48 @@
+---
+import { CollectionEntry, getCollection } from "astro:content";
+import { BlogSchema } from "../../content/config";
+import PostLayout from "../../layouts/PostLayout.astro";
+import createSlug from "../../lib/createSlug";
+
+export async function getStaticPaths() {
+  const postEntries = await getCollection("blog");
+  // Sort by date descending
+  postEntries.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+  return postEntries.map((entry, i) => ({
+    params: { slug: createSlug(entry.data.title, entry.slug) },
+    props: {
+      entry,
+      prevPost: postEntries[i - 1] || null,
+      nextPost: postEntries[i + 1] || null,
+    },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"blog">;
+  prevPost: CollectionEntry<"blog"> | null;
+  nextPost: CollectionEntry<"blog"> | null;
+}
+
+const { entry, prevPost, nextPost } = Astro.props;
+const post: BlogSchema = entry.data;
+const { Content } = await entry.render();
+
+const prevUrl = prevPost ? "/blog/" + createSlug(prevPost.data.title, prevPost.slug) : null;
+const nextUrl = nextPost ? "/blog/" + createSlug(nextPost.data.title, nextPost.slug) : null;
+---
+
+<PostLayout
+  title={post.title}
+  description={post.description}
+  pubDate={post.pubDate}
+  heroImage={post.heroImage}
+  updatedDate={post.updatedDate}
+  badge={post.badge}
+  tags={post.tags}
+  prevPost={prevPost ? { title: prevPost.data.title, url: prevUrl! } : undefined}
+  nextPost={nextPost ? { title: nextPost.data.title, url: nextUrl! } : undefined}
+>
+  <Content />
+</PostLayout>
