@@ -21,5 +21,8 @@ pnpm-debug.log*
 # Astro
 .astro/
 
+# Vercel
+.vercel/
+
 # Superpowers
 .superpowers/.vercel
