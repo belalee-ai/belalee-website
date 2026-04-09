@@ -1,6 +1,6 @@
 ---
 import SideBarFooter from "./SideBarFooter.astro";
-import { Image } from "astro:assets";
+
 import SideBarMenu from "./SideBarMenu.astro";
 const { sideBarActiveItemID } = Astro.props;
 ---
@@ -14,7 +14,7 @@ const { sideBarActiveItemID } = Astro.props;
           <div class="avatar-ring-glow"></div>
           <div class="avatar block m-auto hover:scale-[102%] transition-transform">
             <div class="w-[8.5rem]">
-              <Image class="mask mask-circle" format="webp" width={300} height={300} src="/profile.jpg" alt="Profile image" />
+              <img class="mask mask-circle" width="300" height="300" src="/profile.svg" alt="Profile image" />
             </div>
           </div>
         </div>
