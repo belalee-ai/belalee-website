@@ -9,10 +9,10 @@ interface Props {
 const { title, summary, colorClass, accentColor, details } = Astro.props;
 ---
 
-<div class="collapse collapse-arrow bg-base-200 mb-3" style={accentColor ? `border-left: 3px solid ${accentColor};` : ''}>
+<div class="collapse collapse-arrow bg-base-200 mb-3">
   <input type="checkbox" aria-label={`展开 ${title}`} />
   <div class="collapse-title">
-    <div class="font-semibold" style={accentColor ? `color: ${accentColor};` : 'color: #ff385c;'}>{title}</div>
+    <div class="font-semibold" style={`color: ${accentColor || '#ff385c'};`}>{title}</div>
     <p class="text-sm text-base-content/60 mt-1">{summary}</p>
   </div>
   <div class="collapse-content">

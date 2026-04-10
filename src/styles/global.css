@@ -377,7 +377,6 @@ h1, h2, h3, .text-3xl, .text-4xl {
   font-weight: 600;
   color: #ff385c;
   padding: 0.1rem 0 0.1rem 0.5rem;
-  border-left: 2.5px solid #ff385c;
   letter-spacing: 0.04em;
 }
 
