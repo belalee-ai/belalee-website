@@ -7,19 +7,16 @@ const companies = [
   {
     period: "2022.09 - 2025.08",
     company: "拼多多 & TEMU",
-    logo: "/logos/pdd.svg",
     role: "C端增长产品经理 · 搜索增长 & 欧区广告投放"
   },
   {
     period: "2020.07 - 2022.09",
     company: "美图秀秀",
-    logo: "/logos/meitu.svg",
     role: "影像商业产品经理 · 会员体系从0到1 & 订阅中台"
   },
   {
     period: "2019.04 - 2020.06",
     company: "瑞幸咖啡",
-    logo: "/logos/luckin.svg",
     role: "产品经理 · 营销体系 & 付费会员搭建"
   }
 ];
@@ -28,7 +25,6 @@ const projects = [
   {
     title: "广告投放与 ROI 优化",
     summary: "TEMU 欧区 Facebook 广告 · ROAS 100%+ · 日花费 $10K+",
-    colorClass: "text-primary",
     details: [
       "构建以 ROAS 出价为核心的出价体系，<strong>单条头部广告日花费 $10,000+，ROAS 稳定 100%+</strong>",
       "大转盘、Free Gift 等互动玩法，<strong>支付 UV 提升 15.31%，人均 GMV 增长 28.99%</strong>",
@@ -41,7 +37,6 @@ const projects = [
   {
     title: "订阅商业化",
     summary: "美图会员体系 · 付费收入 +40% · 订阅中台搭建",
-    colorClass: "text-secondary",
     details: [
       "14 层用户精细化分层 + 5 项订阅引导策略，<strong>会员转化率提升 20%+，付费收入提升 40%+</strong>",
       "支付宝外显策略，<strong>支付宝付费占比提高 28%+，年收入提升 1000 万元+</strong>",
@@ -54,7 +49,6 @@ const projects = [
   {
     title: "搜索增长",
     summary: "拼多多搜索 · GMV +13.68% · 搜索全链路优化",
-    colorClass: "text-accent",
     details: [
       "优化搜索推荐词刷新机制，<strong>GMV 提升 13.68%，订单量提升 11.54%</strong>",
       "店铺评价页「搜同款」功能，<strong>全站收入提升 0.75%，支付 GMV 提升 0.64%</strong>",
@@ -67,7 +61,6 @@ const projects = [
   {
     title: "出海活动增长",
     summary: "TEMU 欧洲区 · 激活率 12%+ · 跨文化本地化",
-    colorClass: "text-info",
     details: [
       "端外落地页下载条优化，<strong>日均曝光 UV 千万级，互动率提升 20%+</strong>",
       "负责 TEMU 欧洲区广告落地页策略，<strong>激活率提升至 12%+，UV 转化率提升 5.18%</strong>",
@@ -91,23 +84,14 @@ const projects = [
 
     <div>
       <div class="text-lg font-semibold mb-4 tracking-wide">核心项目</div>
-      {projects.map((p, i) => {
-        const accents = [
-          '#ff385c',
-          '#ff385c',
-          '#ff385c',
-          '#ff385c',
-        ];
-        return (
+      {projects.map((p) => (
         <ProjectCard
           title={p.title}
           summary={p.summary}
-          colorClass={p.colorClass}
-          accentColor={accents[i % accents.length]}
+          accentColor="#ff385c"
           details={p.details}
         />
-        );
-      })}
+      ))}
     </div>
   </div>
 </BaseLayout>

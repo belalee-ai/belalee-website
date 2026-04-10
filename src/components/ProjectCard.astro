@@ -2,11 +2,10 @@
 interface Props {
   title: string;
   summary: string;
-  colorClass: string;
   accentColor?: string;
   details: string[];
 }
-const { title, summary, colorClass, accentColor, details } = Astro.props;
+const { title, summary, accentColor, details } = Astro.props;
 ---
 
 <div class="collapse collapse-arrow bg-base-200 mb-3">

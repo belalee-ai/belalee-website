@@ -30,8 +30,8 @@ const steps = [
   {
     phase: "03",
     title: "视觉系统",
-    desc: "薄荷绿主题色 + 莫兰迪色系搭配，从紫色系迭代到清爽大方的最终方案",
-    detail: "参考业界优秀个人站，通过多轮 AI 协作调整配色、间距、动效，建立统一视觉语言",
+    desc: "从紫色探索回到 Airbnb 式白底空间 + Rausch Red 单一强调色",
+    detail: "参考 Airbnb 官网，把配色收敛到一个稀缺的红——稀缺才有力量。其余都是留白、排印与呼吸感",
     tag: "设计迭代",
   },
   {
@@ -57,12 +57,6 @@ const steps = [
   },
 ];
 
-const highlights = [
-  { num: "50+", label: "轮 AI 协作迭代" },
-  { num: "6", label: "大功能模块" },
-  { num: "5", label: "篇深度文章" },
-  { num: "100%", label: "AI 协作交付" },
-];
 ---
 
 <BaseLayout sideBarActiveItemID="ai-lab" enablePageScroll={false}>
@@ -77,16 +71,6 @@ const highlights = [
       </p>
     </div>
 
-    <!-- Key numbers -->
-    <div class="case-highlights">
-      {highlights.map((h) => (
-        <div class="case-highlight">
-          <span class="case-highlight__num">{h.num}</span>
-          <span class="case-highlight__label">{h.label}</span>
-        </div>
-      ))}
-    </div>
-
     <!-- Core insight -->
     <div class="case-insight">
       <span class="case-insight__icon">💡</span>
@@ -98,7 +82,7 @@ const highlights = [
       </div>
     </div>
 
-    <!-- Build process -->
+    <!-- Build process + Tech stack -->
     <div class="case-section">
       <h2 class="case-section__title">构建过程</h2>
       <div class="case-steps">
@@ -116,11 +100,7 @@ const highlights = [
           </div>
         ))}
       </div>
-    </div>
 
-    <!-- Tech stack -->
-    <div class="case-section">
-      <h2 class="case-section__title">技术栈</h2>
       <div class="case-stack">
         <div class="case-stack-item">
           <span class="case-stack-item__name">Claude Opus</span>
@@ -141,9 +121,9 @@ const highlights = [
       </div>
     </div>
 
-    <!-- Technical decisions (moved before collaboration) -->
+    <!-- Key decisions: technical + collaboration methodology -->
     <div class="case-section">
-      <h2 class="case-section__title">技术决策：为什么这么选</h2>
+      <h2 class="case-section__title">关键决策</h2>
       <p class="case-section__intro">
         在第一步就做了产品架构层面的决策，而不是直接让 AI "帮我写个网页"。每个选择都有明确理由。
       </p>
@@ -160,7 +140,7 @@ const highlights = [
             <span class="case-decision__choice">Tailwind + DaisyUI</span>
             <span class="case-decision__not">而非手写 CSS</span>
           </div>
-          <p class="case-decision__why">主题系统保证全局一致性。改一个配色变量，全站按钮、标签、背景联动更新。后来从紫色换成薄荷绿，就是靠这个。</p>
+          <p class="case-decision__why">主题系统保证全局一致性。改一个配色变量，全站按钮、标签、背景联动更新——从紫色探索收敛到现在的 Airbnb 白底 + Rausch Red，就是靠这个。</p>
         </div>
         <div class="case-decision">
           <div class="case-decision__what">
@@ -177,13 +157,9 @@ const highlights = [
           <p class="case-decision__why">push 代码即自动上线，不用折腾服务器。全球 CDN 加速，国内外访问都快。</p>
         </div>
       </div>
-    </div>
 
-    <!-- Collaboration methodology -->
-    <div class="case-section">
-      <h2 class="case-section__title">协作方法论：指令式 vs 协作式</h2>
-      <p class="case-section__intro">
-        大多数人用 AI 建站时，会把每一个像素、颜色、边框都写进 prompt——本质上是把 AI 当代码翻译器。
+      <p class="case-section__intro" style="margin-top: 2rem;">
+        另一个关键决策是协作方式本身：大多数人用 AI 建站时，会把每一个像素、颜色、边框都写进 prompt——本质上是把 AI 当代码翻译器。
         我的方式完全不同：<strong>给问题和感受，不给解法</strong>，让 AI 发挥设计能力，我负责判断和取舍。
       </p>
 
@@ -219,9 +195,9 @@ const highlights = [
       </div>
     </div>
 
-    <!-- Chat-style collaboration scenes -->
+    <!-- Real scenes + reflection + learnings -->
     <div class="case-section">
-      <h2 class="case-section__title">真实协作场景</h2>
+      <h2 class="case-section__title">真实协作场景与复盘</h2>
 
       <div class="chat-scene">
         <p class="chat-scene__label">场景一 · 5 轮迭代打磨一个交互细节</p>
@@ -261,12 +237,8 @@ const highlights = [
         </div>
         <div class="chat-insight">我发现信息架构问题，提出两个备选并征求 AI 意见。最终采纳 AI 的第三种方案——真正的协作，不是单向指挥。</div>
       </div>
-    </div>
 
-    <!-- Retrospective -->
-    <div class="case-section">
-      <h2 class="case-section__title">协作中的几个关键判断</h2>
-      <div class="dev-review">
+      <div class="dev-review" style="margin-top: 1.5rem;">
         <div class="dev-review__content">
           <div class="dev-review__item">
             <h4>体感判断比 Prompt 更重要</h4>
@@ -286,12 +258,8 @@ const highlights = [
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- What I learned -->
-    <div class="case-section">
-      <h2 class="case-section__title">我的收获</h2>
-      <div class="case-learnings">
+      <div class="case-learnings" style="margin-top: 1.5rem;">
         <div class="case-learning">
           <h4>AI 协作的核心是「提出好问题」</h4>
           <p>模糊的需求得到模糊的结果。我学会了把产品需求拆解成 AI 可执行的具体指令。</p>
@@ -376,36 +344,6 @@ const highlights = [
     color: #222222;
     line-height: 1.7;
     margin-top: 0.75rem;
-  }
-
-  /* Highlights — amber accent */
-  .case-highlights {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.75rem;
-    margin-bottom: 2rem;
-  }
-
-  .case-highlight {
-    text-align: center;
-    padding: 1rem 0.5rem;
-    background: rgba(0,0,0,0.02);
-    border: 1px solid rgba(0,0,0,0.08);
-    border-radius: 0.75rem;
-  }
-
-  .case-highlight__num {
-    display: block;
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #ff385c;
-  }
-
-  .case-highlight__label {
-    font-size: 0.68rem;
-    color: #6a6a6a;
-    margin-top: 0.15rem;
-    display: block;
   }
 
   /* Insight callout — indigo accent */
@@ -915,12 +853,6 @@ const highlights = [
     }
     .case-subtitle {
       font-size: 0.82rem;
-    }
-    .case-highlights {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    .case-highlight__num {
-      font-size: 1.3rem;
     }
     .case-section__title {
       font-size: 1rem;
