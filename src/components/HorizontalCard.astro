@@ -33,7 +33,7 @@ const badgeColor = badge ? (badgeColors[badge] || "#ff385c") : "";
           {badge && <span class="card-badge" style={`color: ${badgeColor}; border-left-color: ${badgeColor};`}>{badge}</span>}
           <h1 class="text-base font-semibold text-base-content/80 leading-snug">{title}</h1>
         </div>
-        <p class="text-sm text-base-content/45 leading-relaxed">{desc}</p>
+        <p class="text-sm text-base-content/60 leading-relaxed">{desc}</p>
         {tags && tags.length > 0 && (
           <div class="card-tags-inline">
             {tags.map((tag, i) => (

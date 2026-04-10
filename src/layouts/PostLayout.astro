@@ -32,7 +32,7 @@ const tag_url = "/blog/tag";
 ---
 
 <BaseLayout title={title} description={description} image={heroImage} ogType="article" enablePageScroll={false}>
-  <main class="md:flex md:justify-center">
+  <div class="md:flex md:justify-center">
     <article class="prose prose-lg max-w-[750px] prose-img:mx-auto post-article">
       {heroImage && <Image width={750} height={422} format="webp" src={heroImage} alt={title} class="w-full mb-6 rounded-xl" />}
 
@@ -103,7 +103,7 @@ const tag_url = "/blog/tag";
         <a href="/blog" class="post-back__link">← 返回所有文章</a>
       </div>
     </article>
-  </main>
+  </div>
 </BaseLayout>
 
 <script>
@@ -370,7 +370,7 @@ const tag_url = "/blog/tag";
   }
 
   .post-body strong {
-    color: #ff385c;
+    color: #222222;
     font-weight: 600;
   }
 
@@ -405,7 +405,7 @@ const tag_url = "/blog/tag";
 
   .post-body :not(pre) > code {
     background: rgba(0,0,0,0.02) !important;
-    color: #ff385c !important;
+    color: #222222 !important;
     padding: 0.15rem 0.4rem !important;
     border-radius: 0.3rem !important;
     font-size: 0.82rem !important;
