@@ -63,32 +63,6 @@ h1, h2, h3, .text-3xl, .text-4xl {
   box-shadow: 0 4px 12px rgba(255, 56, 92, 0.25);
 }
 
-/* Name shimmer / sweep light effect — Rausch Red */
-@keyframes shimmer {
-  0% {
-    background-position: -200% center;
-  }
-  100% {
-    background-position: 200% center;
-  }
-}
-
-.shimmer-text {
-  background: linear-gradient(
-    90deg,
-    #222222 0%,
-    #222222 40%,
-    #ff385c 50%,
-    #222222 60%,
-    #222222 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shimmer 4s ease-in-out infinite;
-}
-
 /* Home sections layout */
 .home-sections {
   display: grid;
@@ -119,7 +93,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
   font-size: 0.75rem;
   color: #6a6a6a;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .home-section__more:hover {
@@ -136,7 +110,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 .home-carousel__track {
   display: flex;
-  transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .home-carousel__slide {
@@ -171,7 +145,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
   padding: 0;
   text-indent: 0;
   opacity: 0;
-  transition: all 0.3s ease;
+  transition: opacity 250ms cubic-bezier(0.25, 0.1, 0.25, 1), background-color 200ms cubic-bezier(0.25, 0.1, 0.25, 1), color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
   box-shadow: rgba(0,0,0,0.08) 0px 4px 12px;
 }
 
@@ -206,7 +180,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
   border: none;
   background: #e5e5e5;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 250ms cubic-bezier(0.25, 0.1, 0.25, 1), width 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
   padding: 8px;
   background-clip: content-box;
 }
@@ -299,7 +273,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
   padding: 0.7rem 0.75rem;
   border-radius: 8px;
   text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: background-color 250ms cubic-bezier(0.25, 0.1, 0.25, 1), padding 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
   border-bottom: 1px solid rgba(0,0,0,0.06);
 }
 
@@ -348,7 +322,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
   color: #ff385c;
   opacity: 0;
   transform: translateX(-4px);
-  transition: all 0.3s ease;
+  transition: opacity 250ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
   flex-shrink: 0;
 }
 
@@ -361,7 +335,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
   font-size: 0.75rem;
   color: #6a6a6a;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .home-insights-more:hover {
@@ -373,7 +347,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
   position: relative;
   border-radius: 14px;
   margin-bottom: 0.25rem;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 250ms cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .card-row:hover {
@@ -386,7 +360,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
   color: #ff385c;
   opacity: 0;
   transform: translateX(-6px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 250ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
   flex-shrink: 0;
   line-height: 1;
 }
@@ -419,7 +393,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
   font-size: 0.75rem;
   color: #6a6a6a;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .card-tag-link:hover {
@@ -433,7 +407,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 /* Card hover effects — three-layer shadow */
 .collapse {
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  transition: box-shadow 250ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
   border: 1px solid #e5e5e5;
 }
 
@@ -444,7 +418,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 /* Tag cloud enhanced */
 .tag-cloud-item {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 200ms cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .tag-cloud-item:hover {
@@ -454,12 +428,12 @@ h1, h2, h3, .text-3xl, .text-4xl {
 /* Timeline enhanced dots */
 .timeline-dot {
   box-shadow: 0 0 0 4px #f2f2f2;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 /* Contact card hover lift — three-layer shadow */
 .contact-card {
-  transition: all 0.3s ease;
+  transition: transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 250ms cubic-bezier(0.25, 0.1, 0.25, 1), border-color 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
   border: 1px solid transparent;
 }
 
@@ -471,7 +445,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 /* Blog card links subtle hover */
 a .card {
-  transition: transform 0.2s ease;
+  transition: transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 a:hover .card {
@@ -504,7 +478,7 @@ a:hover .card {
 }
 
 .avatar-entrance {
-  animation: avatarDrop 0.8s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+  animation: avatarDrop 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
 .avatar-entrance .avatar {
@@ -559,7 +533,7 @@ a:hover .card {
   display: flex;
   align-items: center;
   color: #6a6a6a;
-  transition: color 0.3s ease;
+  transition: color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .sidebar-link {
@@ -577,7 +551,7 @@ a:hover .card {
 }
 
 .sidebar-bg .menu a {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1), color 250ms cubic-bezier(0.4, 0, 0.2, 1), transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 8px;
   padding: 0.65rem 1rem;
   margin-bottom: 0.2rem;
@@ -609,13 +583,19 @@ html, body {
   overscroll-behavior: none;
 }
 
-/* Reduced motion support */
+/* Reduced motion support — covers fadeSlideUp, cardSlideUp, avatarDrop,
+   avatarFadeScale, ringReveal, bubblePop, carousel track, and all hover transitions */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .home-carousel__track {
+    transition: none !important;
   }
 }
 
@@ -635,7 +615,7 @@ html, body {
   }
 
   /* Hero text smaller */
-  .shimmer-text {
+  .hero-gradient h1 {
     font-size: 2rem !important;
   }
 

@@ -57,7 +57,7 @@ const nextPage = currentIndex < pages.length - 1 ? pages[currentIndex + 1] : nul
     padding: 1.5rem 0 1rem;
     opacity: 0;
     transform: translateY(8px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    transition: opacity 400ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1);
     cursor: pointer;
     user-select: none;
     text-decoration: none;
@@ -72,7 +72,7 @@ const nextPage = currentIndex < pages.length - 1 ? pages[currentIndex + 1] : nul
   .page-scroll-hint__arrow {
     font-size: 1.25rem;
     color: #c1c1c1;
-    animation: bounce-arrow 1.5s ease-in-out infinite;
+    animation: arrow-pulse 2.4s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
   }
 
   .page-scroll-hint__label {
@@ -81,8 +81,14 @@ const nextPage = currentIndex < pages.length - 1 ? pages[currentIndex + 1] : nul
     letter-spacing: 0.1em;
   }
 
-  @keyframes bounce-arrow {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(6px); }
+  @keyframes arrow-pulse {
+    0%, 100% { opacity: 0.55; transform: translateY(0); }
+    50%      { opacity: 1;    transform: translateY(2px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-scroll-hint__arrow {
+      animation: none;
+    }
   }
 </style>

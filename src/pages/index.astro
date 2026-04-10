@@ -36,7 +36,7 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
           <img src="/profile.jpg" alt="梨贝拉" />
         </div>
       </div>
-      <h1 class="text-4xl font-bold tracking-wide shimmer-text"><span class="inline-block" style="filter: none; -webkit-text-fill-color: initial; background: none; -webkit-background-clip: initial; background-clip: initial;">🍐</span>梨贝拉</h1>
+      <h1 class="text-4xl font-bold tracking-wide"><span class="inline-block">🍐</span>梨贝拉</h1>
       <p class="text-base mt-4 tracking-widest">
         <span style="color: #222222;">效果广告</span>
         <span class="text-base-content/25"> ｜ </span>
@@ -136,6 +136,7 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
       var current = 0;
       var total = dots.length;
       var timer;
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       function goTo(index) {
         current = ((index % total) + total) % total;
@@ -147,6 +148,7 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
       }
 
       function startAuto() {
+        if (prefersReducedMotion) return;
         timer = setInterval(function() { goTo(current + 1); }, 4000);
       }
 
