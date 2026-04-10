@@ -80,7 +80,7 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
         <h2 class="home-section__title">AI 实验室</h2>
         <a href="/ai-lab" class="home-section__more">All →</a>
       </div>
-      <div class="home-carousel" id="home-carousel" aria-roledescription="轮播" aria-label="AI 实验室项目">
+      <div class="home-carousel" id="home-carousel" role="region" tabindex="0" aria-roledescription="轮播" aria-label="精选项目轮播">
         <button class="carousel-arrow carousel-arrow--left" id="carousel-prev" aria-label="上一个">‹</button>
         <button class="carousel-arrow carousel-arrow--right" id="carousel-next" aria-label="下一个">›</button>
         <div class="home-carousel__track" id="home-carousel-track">
@@ -198,6 +198,51 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
         carousel.addEventListener('mouseleave', function() { resetAuto(); });
         carousel.addEventListener('focusin', function() { clearInterval(timer); });
         carousel.addEventListener('focusout', function() { resetAuto(); });
+
+        // Keyboard navigation (WCAG 2.1.1)
+        carousel.addEventListener('keydown', function(e) {
+          if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            goTo(current - 1);
+            resetAuto();
+          } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            goTo(current + 1);
+            resetAuto();
+          } else if (e.key === 'Home') {
+            e.preventDefault();
+            goTo(0);
+            resetAuto();
+          } else if (e.key === 'End') {
+            e.preventDefault();
+            goTo(total - 1);
+            resetAuto();
+          }
+        });
+
+        // Touch swipe support
+        var touchStartX = 0;
+        var touchStartY = 0;
+        var touchEndX = 0;
+        var touchEndY = 0;
+        carousel.addEventListener('touchstart', function(e) {
+          touchStartX = e.changedTouches[0].screenX;
+          touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+        carousel.addEventListener('touchend', function(e) {
+          touchEndX = e.changedTouches[0].screenX;
+          touchEndY = e.changedTouches[0].screenY;
+          var deltaX = touchEndX - touchStartX;
+          var deltaY = touchEndY - touchStartY;
+          if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (deltaX < 0) {
+              goTo(current + 1);
+            } else {
+              goTo(current - 1);
+            }
+            resetAuto();
+          }
+        }, { passive: true });
       }
     });
   </script>

@@ -8,6 +8,7 @@ body {
   font-family: 'Noto Sans SC', 'Plus Jakarta Sans', system-ui, sans-serif;
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, .text-3xl, .text-4xl {
@@ -130,13 +131,13 @@ h1, h2, h3, .text-3xl, .text-4xl {
   top: calc(50% - 1rem);
   transform: translateY(-50%);
   z-index: 5;
-  width: 2rem;
-  height: 2rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: 50%;
   border: none;
   background: #f2f2f2;
   color: #222222;
-  font-size: 1.1rem;
+  font-size: 1.35rem;
   cursor: pointer;
   display: flex;
   align-items: center;
