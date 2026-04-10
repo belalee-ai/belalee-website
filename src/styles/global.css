@@ -490,13 +490,7 @@ a:hover .card {
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  background: conic-gradient(
-    #ff385c,
-    #ff8fa0,
-    #ff385c,
-    #ffb3c1,
-    #ff385c
-  );
+  background: linear-gradient(180deg, rgba(255,56,92,0.18), rgba(255,56,92,0.04));
   opacity: 0;
   animation: ringReveal 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) 0.3s forwards;
 }
@@ -543,15 +537,11 @@ a:hover .card {
 @keyframes ringReveal {
   0% {
     opacity: 0;
-    transform: scale(0.85) rotate(-90deg);
-  }
-  60% {
-    opacity: 0.8;
-    transform: scale(1.05) rotate(180deg);
+    transform: scale(0.9);
   }
   100% {
     opacity: 1;
-    transform: scale(1) rotate(360deg);
+    transform: scale(1);
   }
 }
 
@@ -595,7 +585,7 @@ a:hover .card {
 
 .sidebar-bg .menu a:hover {
   background: rgba(0,0,0,0.04);
-  padding-left: 1.25rem;
+  transform: translateX(0.25rem);
 }
 
 .sidebar-bg .menu a.sidebar-active {
