@@ -8,17 +8,28 @@ module.exports = {
 	daisyui: {
 		themes: [
 			{
-				pastel: {
-					...require("daisyui/src/theming/themes")["pastel"],
-					"primary": "#6bbaa7",
+				airbnb: {
+					"primary": "#ff385c",
 					"primary-content": "#ffffff",
-					"secondary": "#89c4b8",
-					"accent": "#4da692",
-					"neutral": "#5ea0a0",
+					"secondary": "#f2f2f2",
+					"secondary-content": "#222222",
+					"accent": "#ff385c",
+					"accent-content": "#ffffff",
+					"neutral": "#222222",
+					"neutral-content": "#ffffff",
+					"base-100": "#ffffff",
+					"base-200": "#f2f2f2",
+					"base-300": "#e5e5e5",
+					"base-content": "#222222",
+					"info": "#428bff",
+					"info-content": "#ffffff",
+					"success": "#36d399",
+					"warning": "#fbbd23",
+					"error": "#c13515",
+					"error-content": "#ffffff",
 				},
 			},
 		],
-		darkTheme: "dark",
 		logs: false,
-	  }
+	}
 }

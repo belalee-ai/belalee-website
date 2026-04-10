@@ -4,13 +4,13 @@ import { Image } from "astro:assets";
 const tag_url = url.split("/").slice(0, -1).join("/") + "/tag";
 
 const badgeColors: Record<string, string> = {
-  "商业化": "oklch(0.52 0.10 260)",
-  "增长": "oklch(0.50 0.10 180)",
-  "出海": "oklch(0.55 0.12 50)",
-  "工作流": "oklch(0.55 0.10 30)",
-  "AI 转型": "oklch(0.50 0.08 280)",
+  "商业化": "#ff385c",
+  "增长": "#ff385c",
+  "出海": "#ff385c",
+  "工作流": "#ff385c",
+  "AI 转型": "#ff385c",
 };
-const badgeColor = badge ? (badgeColors[badge] || "oklch(0.52 0.08 180)") : "";
+const badgeColor = badge ? (badgeColors[badge] || "#ff385c") : "";
 ---
 
 <div class="card-row group">

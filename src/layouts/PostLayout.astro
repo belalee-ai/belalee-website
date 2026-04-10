@@ -18,13 +18,13 @@ const { title, description, pubDate, updatedDate, heroImage, badge, tags = [], p
 dayjs.extend(localizedFormat);
 
 const postBadgeColors: Record<string, string> = {
-  "商业化": "oklch(0.48 0.10 260)",
-  "增长": "oklch(0.48 0.10 180)",
-  "出海": "oklch(0.52 0.10 50)",
-  "工作流": "oklch(0.50 0.10 30)",
-  "AI 转型": "oklch(0.48 0.08 280)",
+  "商业化": "#ff385c",
+  "增长": "#ff385c",
+  "出海": "#ff385c",
+  "工作流": "#ff385c",
+  "AI 转型": "#ff385c",
 };
-const postBadgeColor = badge ? (postBadgeColors[badge] || "oklch(0.65 0.10 180)") : "";
+const postBadgeColor = badge ? (postBadgeColors[badge] || "#ff385c") : "";
 const displayDate = dayjs(pubDate).format("ll");
 import { Image } from "astro:assets";
 
@@ -202,14 +202,14 @@ const tag_url = "/blog/tag";
 
   .post-meta__date {
     font-size: 0.78rem;
-    color: oklch(0.55 0.03 195);
+    color: #6a6a6a;
   }
 
   .post-meta__badge {
     font-size: 0.65rem;
     padding: 0.2rem 0.6rem;
     border-radius: 2rem;
-    background: oklch(0.65 0.10 180);
+    background: #ff385c;
     color: #fff;
     font-weight: 600;
     letter-spacing: 0.03em;
@@ -223,8 +223,8 @@ const tag_url = "/blog/tag";
 
   .post-tag {
     font-size: 0.7rem !important;
-    color: oklch(0.55 0.06 180) !important;
-    background: oklch(0.95 0.02 185 / 0.5);
+    color: #ff385c !important;
+    background: rgba(0,0,0,0.02);
     padding: 0.15rem 0.5rem;
     border-radius: 1rem;
     text-decoration: none !important;
@@ -232,13 +232,13 @@ const tag_url = "/blog/tag";
   }
 
   .post-tag:hover {
-    background: oklch(0.90 0.04 180 / 0.6);
+    background: rgba(0,0,0,0.04);
   }
 
   /* TL;DR block */
   .post-tldr {
-    background: linear-gradient(135deg, oklch(0.97 0.015 190 / 0.6), oklch(0.96 0.012 195 / 0.4));
-    border-left: 3px solid oklch(0.68 0.10 180);
+    background: linear-gradient(135deg, rgba(0,0,0,0.02), rgba(0,0,0,0.02));
+    border-left: 3px solid #ff385c;
     border-radius: 0 0.75rem 0.75rem 0;
     padding: 1rem 1.25rem;
     margin-bottom: 1.25rem !important;
@@ -251,21 +251,21 @@ const tag_url = "/blog/tag";
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: oklch(0.52 0.08 180);
+    color: #ff385c;
     margin-bottom: 0.3rem;
   }
 
   .post-tldr__text {
     font-size: 0.88rem !important;
-    color: oklch(0.38 0.03 200);
+    color: #222222;
     line-height: 1.65 !important;
     margin: 0 !important;
   }
 
   /* TOC */
   .post-toc {
-    background: oklch(0.98 0.008 195 / 0.5);
-    border: 1px solid oklch(0.93 0.015 190 / 0.5);
+    background: rgba(0,0,0,0.02);
+    border: 1px solid rgba(0,0,0,0.08);
     border-radius: 0.75rem;
     padding: 1rem 1.25rem;
     margin-bottom: 2rem !important;
@@ -280,14 +280,14 @@ const tag_url = "/blog/tag";
   }
 
   .post-toc__icon {
-    color: oklch(0.55 0.07 180);
+    color: #ff385c;
     display: flex;
   }
 
   .post-toc__title {
     font-size: 0.72rem;
     font-weight: 600;
-    color: oklch(0.50 0.05 185);
+    color: #ff385c;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
@@ -310,7 +310,7 @@ const tag_url = "/blog/tag";
   .post-toc__link {
     display: block;
     font-size: 0.8rem !important;
-    color: oklch(0.48 0.03 200) !important;
+    color: #6a6a6a !important;
     text-decoration: none !important;
     padding: 0.3rem 0.6rem;
     border-radius: 0.4rem;
@@ -321,25 +321,25 @@ const tag_url = "/blog/tag";
 
   .post-toc__link::before {
     content: counter(toc) ". ";
-    color: oklch(0.62 0.06 180);
+    color: #ff385c;
     font-weight: 500;
   }
 
   .post-toc__link:hover {
-    background: oklch(0.95 0.02 185 / 0.5);
-    color: oklch(0.38 0.05 185) !important;
+    background: rgba(0,0,0,0.02);
+    color: #222222 !important;
   }
 
   .post-toc__link.active {
-    border-left-color: oklch(0.62 0.10 180);
-    background: oklch(0.95 0.02 185 / 0.5);
-    color: oklch(0.38 0.08 180) !important;
+    border-left-color: #ff385c;
+    background: rgba(0,0,0,0.02);
+    color: #ff385c !important;
     font-weight: 500;
   }
 
   .post-updated {
     font-size: 0.72rem !important;
-    color: oklch(0.55 0.03 195);
+    color: #6a6a6a;
     margin-bottom: 1rem !important;
   }
 
@@ -350,27 +350,27 @@ const tag_url = "/blog/tag";
     margin-top: 2.5rem !important;
     margin-bottom: 1rem !important;
     padding-bottom: 0.4rem;
-    border-bottom: 1.5px solid oklch(0.93 0.02 190 / 0.5);
-    color: oklch(0.28 0.03 200);
+    border-bottom: 1.5px solid rgba(0,0,0,0.08);
+    color: #222222;
     scroll-margin-top: 2rem;
   }
 
   .post-body h3 {
     font-size: 1.1rem !important;
     font-weight: 600;
-    color: oklch(0.35 0.04 195);
+    color: #222222;
     margin-top: 1.8rem !important;
   }
 
   .post-body p {
     font-size: 0.92rem !important;
     line-height: 1.85 !important;
-    color: oklch(0.38 0.02 210);
+    color: #222222;
     margin-bottom: 1.1rem !important;
   }
 
   .post-body strong {
-    color: oklch(0.45 0.08 180);
+    color: #ff385c;
     font-weight: 600;
   }
 
@@ -382,70 +382,70 @@ const tag_url = "/blog/tag";
   .post-body li {
     font-size: 0.9rem !important;
     line-height: 1.8 !important;
-    color: oklch(0.40 0.02 210);
+    color: #222222;
     margin-bottom: 0.35rem !important;
   }
 
   .post-body li::marker {
-    color: oklch(0.65 0.08 180);
+    color: #ff385c;
   }
 
   .post-body blockquote {
-    border-left-color: oklch(0.72 0.08 180) !important;
-    background: oklch(0.97 0.01 195 / 0.4);
+    border-left-color: #ff385c !important;
+    background: rgba(0,0,0,0.02);
     border-radius: 0 0.5rem 0.5rem 0;
     padding: 0.75rem 1rem !important;
     font-style: normal !important;
   }
 
   .post-body blockquote p {
-    color: oklch(0.42 0.03 200) !important;
+    color: #222222 !important;
     font-size: 0.88rem !important;
   }
 
   .post-body :not(pre) > code {
-    background: oklch(0.95 0.015 190 / 0.5) !important;
-    color: oklch(0.45 0.06 180) !important;
+    background: rgba(0,0,0,0.02) !important;
+    color: #ff385c !important;
     padding: 0.15rem 0.4rem !important;
     border-radius: 0.3rem !important;
     font-size: 0.82rem !important;
   }
 
   .post-body a {
-    color: oklch(0.50 0.10 180) !important;
-    text-decoration-color: oklch(0.70 0.06 180 / 0.4) !important;
+    color: #ff385c !important;
+    text-decoration-color: rgba(255,56,92,0.4) !important;
     text-underline-offset: 3px;
     transition: color 0.2s ease, text-decoration-color 0.2s ease;
   }
 
   .post-body a:hover {
-    color: oklch(0.42 0.12 175) !important;
-    text-decoration-color: oklch(0.50 0.10 180) !important;
+    color: #ff385c !important;
+    text-decoration-color: #ff385c !important;
   }
 
   .post-body hr {
     border: none !important;
-    border-top: 1.5px solid oklch(0.93 0.02 190 / 0.5) !important;
+    border-top: 1.5px solid rgba(0,0,0,0.08) !important;
     margin: 2rem 0 !important;
   }
 
   /* Reference section */
   .post-body h2:last-of-type {
     font-size: 1rem !important;
-    color: oklch(0.50 0.03 195);
+    color: #6a6a6a;
     border-bottom: none;
   }
 
   .post-body h2:last-of-type ~ p {
     font-size: 0.78rem !important;
-    color: oklch(0.55 0.02 200);
+    color: #6a6a6a;
     line-height: 1.6 !important;
     margin-bottom: 0.4rem !important;
   }
 
   .post-body h2:last-of-type ~ p a {
     font-size: 0.78rem !important;
-    color: oklch(0.55 0.05 190) !important;
+    color: #6a6a6a !important;
   }
 
   /* Prev / Next navigation */
@@ -462,16 +462,16 @@ const tag_url = "/blog/tag";
     flex-direction: column;
     gap: 0.3rem;
     padding: 1rem 1.15rem;
-    border: 1px solid oklch(0.93 0.015 195 / 0.5);
+    border: 1px solid rgba(0,0,0,0.08);
     border-radius: 0.75rem;
     text-decoration: none !important;
     transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
   }
 
   .post-nav__item:hover {
-    background: oklch(0.97 0.012 190 / 0.6);
-    border-color: oklch(0.85 0.04 185 / 0.5);
-    box-shadow: 0 4px 16px oklch(0.80 0.05 190 / 0.12);
+    background: rgba(0,0,0,0.02);
+    border-color: rgba(0,0,0,0.08);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
   }
 
   .post-nav__item--next {
@@ -480,14 +480,14 @@ const tag_url = "/blog/tag";
 
   .post-nav__label {
     font-size: 0.65rem;
-    color: oklch(0.58 0.06 180);
+    color: #ff385c;
     font-weight: 500;
     letter-spacing: 0.05em;
   }
 
   .post-nav__title {
     font-size: 0.85rem !important;
-    color: oklch(0.35 0.03 200) !important;
+    color: #222222 !important;
     font-weight: 500;
     line-height: 1.4;
     display: -webkit-box;
@@ -505,13 +505,13 @@ const tag_url = "/blog/tag";
 
   .post-back__link {
     font-size: 0.78rem !important;
-    color: oklch(0.55 0.05 190) !important;
+    color: #6a6a6a !important;
     text-decoration: none !important;
     transition: color 0.2s ease;
   }
 
   .post-back__link:hover {
-    color: oklch(0.45 0.08 180) !important;
+    color: #ff385c !important;
   }
 
   /* Mermaid diagrams */
@@ -520,8 +520,8 @@ const tag_url = "/blog/tag";
     justify-content: center;
     margin: 1.5rem 0;
     padding: 1.25rem;
-    background: oklch(0.98 0.008 195 / 0.5);
-    border: 1px solid oklch(0.93 0.015 190 / 0.5);
+    background: rgba(0,0,0,0.02);
+    border: 1px solid rgba(0,0,0,0.08);
     border-radius: 0.75rem;
     overflow-x: auto;
   }
@@ -535,15 +535,15 @@ const tag_url = "/blog/tag";
   .design-figure {
     margin: 1.5rem 0;
     padding: 1.5rem;
-    background: linear-gradient(135deg, oklch(0.98 0.01 190 / 0.6), oklch(0.97 0.008 200 / 0.4));
-    border: 1px solid oklch(0.92 0.02 185 / 0.5);
+    background: linear-gradient(135deg, rgba(0,0,0,0.02), rgba(0,0,0,0.02));
+    border: 1px solid rgba(0,0,0,0.08);
     border-radius: 0.75rem;
   }
 
   .design-figure__title {
     font-size: 0.72rem;
     font-weight: 600;
-    color: oklch(0.50 0.06 180);
+    color: #ff385c;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: 1rem;

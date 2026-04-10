@@ -11,10 +11,10 @@ interface Props {
 const { items } = Astro.props;
 ---
 
-<div class="relative pl-8 border-l-2 border-primary/20">
+<div class="relative pl-8 border-l-2 border-[#c1c1c1]">
   {items.map((item, i) => (
     <div class={`relative pb-8 ${i === items.length - 1 ? 'pb-0' : ''}`}>
-      <div class="absolute -left-[25px] w-4 h-4 rounded-full bg-primary/60 border-2 border-base-100"></div>
+      <div class="absolute -left-[25px] w-4 h-4 rounded-full bg-[#ff385c] border-2 border-base-100"></div>
       <div class="flex items-center gap-2 flex-wrap">
         <span class="text-sm font-bold">{item.period}</span>
         <span class="text-base-content/30">·</span>

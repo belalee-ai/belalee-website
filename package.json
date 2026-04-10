@@ -20,11 +20,13 @@
     "astro": "^4.0.2",
     "daisyui": "^4.4.10",
     "dayjs": "^1.11.9",
+    "lxgw-wenkai-webfont": "^1.7.0",
     "prismjs": "^1.30.0",
     "sharp": "^0.32.6",
     "tailwindcss": "^3.3.5"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10"
-  }
+  },
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
 }

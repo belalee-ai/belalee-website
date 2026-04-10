@@ -4,7 +4,7 @@ import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/static";
 
 export default defineConfig({
-  site: 'https://belalee.vercel.app',
+  site: 'https://liwenhui.vercel.app',
   output: 'static',
   adapter: vercel(),
   integrations: [mdx(), tailwind()]

@@ -137,8 +137,8 @@ const sizeRadius: Record<string, number> = {
   .bubble-cloud {
     position: relative;
     border-radius: 50%;
-    background: radial-gradient(circle, oklch(0.97 0.012 190 / 0.5) 0%, oklch(0.98 0.008 195 / 0.15) 65%, transparent 100%);
-    border: 1.5px solid oklch(0.92 0.02 190 / 0.25);
+    background: radial-gradient(circle, rgba(0,0,0,0.02) 0%, transparent 100%);
+    border: 1.5px solid rgba(0,0,0,0.06);
   }
 
   .bubble {
@@ -169,47 +169,47 @@ const sizeRadius: Record<string, number> = {
   .bubble:hover {
     transform: scale(1.12);
     z-index: 10;
-    box-shadow: 0 8px 24px oklch(0.60 0.10 185 / 0.35);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   }
 
   .bubble-xl {
-    background: linear-gradient(135deg, oklch(0.68 0.12 175), oklch(0.60 0.14 188));
+    background: linear-gradient(135deg, #ff385c, #e00b41);
     color: #fff;
     font-weight: 700;
     font-size: 1.1rem;
-    box-shadow: 0 4px 18px oklch(0.60 0.12 180 / 0.3);
+    box-shadow: 0 4px 18px rgba(255,56,92,0.3);
   }
 
   .bubble-lg {
-    background: linear-gradient(135deg, oklch(0.74 0.09 180), oklch(0.68 0.11 192));
+    background: linear-gradient(135deg, #ff6b81, #ff385c);
     color: #fff;
     font-weight: 600;
     font-size: 0.95rem;
-    box-shadow: 0 3px 14px oklch(0.68 0.09 185 / 0.25);
+    box-shadow: 0 3px 14px rgba(255,56,92,0.2);
   }
 
   .bubble-md {
-    background: linear-gradient(135deg, oklch(0.82 0.06 185), oklch(0.78 0.08 195));
-    color: oklch(0.28 0.06 185);
+    background: #f2f2f2;
+    color: #222222;
     font-weight: 500;
     font-size: 0.85rem;
-    box-shadow: 0 2px 10px oklch(0.78 0.06 190 / 0.2);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
   }
 
   .bubble-sm {
-    background: linear-gradient(135deg, oklch(0.90 0.04 190), oklch(0.86 0.05 198));
-    color: oklch(0.32 0.05 185);
+    background: #f2f2f2;
+    color: #222222;
     font-weight: 500;
     font-size: 0.78rem;
-    box-shadow: 0 2px 8px oklch(0.85 0.04 190 / 0.15);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   }
 
   .bubble-xs {
-    background: oklch(0.94 0.025 195);
-    color: oklch(0.40 0.04 190);
+    background: #f2f2f2;
+    color: #6a6a6a;
     font-weight: 400;
     font-size: 0.72rem;
-    box-shadow: 0 1px 5px oklch(0.90 0.02 195 / 0.1);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.03);
   }
 
   .bubble-logo {

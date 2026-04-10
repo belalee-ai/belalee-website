@@ -20,11 +20,11 @@ const posts = (await getCollection("blog")).sort((a, b) => {
 });
 
 const badgeAccents: Record<string, { color: string; bg: string }> = {
-  "商业化": { color: "oklch(0.48 0.10 260)", bg: "oklch(0.94 0.02 260 / 0.35)" },
-  "增长": { color: "oklch(0.48 0.10 180)", bg: "oklch(0.94 0.02 185 / 0.4)" },
-  "出海": { color: "oklch(0.52 0.10 50)", bg: "oklch(0.95 0.02 50 / 0.35)" },
-  "工作流": { color: "oklch(0.50 0.10 30)", bg: "oklch(0.95 0.02 30 / 0.3)" },
-  "AI 转型": { color: "oklch(0.48 0.08 280)", bg: "oklch(0.94 0.02 280 / 0.3)" },
+  "商业化": { color: "#222222", bg: "rgba(0,0,0,0.04)" },
+  "增长": { color: "#222222", bg: "rgba(0,0,0,0.04)" },
+  "出海": { color: "#222222", bg: "rgba(0,0,0,0.04)" },
+  "工作流": { color: "#222222", bg: "rgba(0,0,0,0.04)" },
+  "AI 转型": { color: "#222222", bg: "rgba(0,0,0,0.04)" },
 };
 ---
 
@@ -38,11 +38,11 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
       </div>
       <h1 class="text-4xl font-bold tracking-wide shimmer-text"><span class="inline-block" style="filter: none; -webkit-text-fill-color: initial; background: none; -webkit-background-clip: initial; background-clip: initial;">🍐</span>梨贝拉</h1>
       <p class="text-base mt-4 tracking-widest">
-        <span style="color: oklch(0.55 0.10 50);">效果广告</span>
+        <span style="color: #222222;">效果广告</span>
         <span class="text-base-content/25"> ｜ </span>
-        <span style="color: oklch(0.50 0.10 260);">订阅商业化</span>
+        <span style="color: #222222;">订阅商业化</span>
         <span class="text-base-content/25"> ｜ </span>
-        <span style="color: oklch(0.50 0.10 180);">出海增长</span>
+        <span style="color: #222222;">出海增长</span>
       </p>
       <p class="text-sm mt-5 text-base-content/40 leading-relaxed max-w-md mx-auto">
         6年+ C端增长与商业化实战，前拼多多/TEMU · 美图秀秀 · 瑞幸咖啡<br/>
@@ -80,7 +80,7 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
         <h2 class="home-section__title">AI 实验室</h2>
         <a href="/ai-lab" class="home-section__more">All →</a>
       </div>
-      <div class="home-carousel" id="home-carousel">
+      <div class="home-carousel" id="home-carousel" aria-roledescription="轮播" aria-label="AI 实验室项目">
         <button class="carousel-arrow carousel-arrow--left" id="carousel-prev" aria-label="上一个">‹</button>
         <button class="carousel-arrow carousel-arrow--right" id="carousel-next" aria-label="下一个">›</button>
         <div class="home-carousel__track" id="home-carousel-track">
@@ -117,9 +117,9 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
           </div>
         </div>
         <div class="home-carousel__dots" id="home-carousel-dots">
-          <span class="home-carousel__dot active" data-index="0"></span>
-          <span class="home-carousel__dot" data-index="1"></span>
-          <span class="home-carousel__dot" data-index="2"></span>
+          <button class="home-carousel__dot active" data-index="0" aria-label="幻灯片 1" type="button"></button>
+          <button class="home-carousel__dot" data-index="1" aria-label="幻灯片 2" type="button"></button>
+          <button class="home-carousel__dot" data-index="2" aria-label="幻灯片 3" type="button"></button>
         </div>
       </div>
     </div>
@@ -177,6 +177,15 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
       }
 
       startAuto();
+
+      // Pause auto-play on hover/focus (WCAG 2.2.2)
+      var carousel = document.getElementById('home-carousel');
+      if (carousel) {
+        carousel.addEventListener('mouseenter', function() { clearInterval(timer); });
+        carousel.addEventListener('mouseleave', function() { resetAuto(); });
+        carousel.addEventListener('focusin', function() { clearInterval(timer); });
+        carousel.addEventListener('focusout', function() { resetAuto(); });
+      }
     });
   </script>
 </BaseLayout>
