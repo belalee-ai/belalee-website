@@ -26,3 +26,4 @@ pnpm-debug.log*
 
 # Superpowers
 .superpowers/.vercel
+.vercel
