@@ -14,7 +14,7 @@ const badgeColor = badge ? (badgeColors[badge] || "#ff385c") : "";
 ---
 
 <div class="card-row group">
-  <a href={url} target={target} class="block">
+  <a href={url} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined} class="block">
     <div class="hero-content flex-col md:flex-row items-center">
       {
         img && (
@@ -31,7 +31,7 @@ const badgeColor = badge ? (badgeColors[badge] || "#ff385c") : "";
       <div class="grow w-full">
         <div class="flex items-center gap-2 mb-0.5">
           {badge && <span class="card-badge" style={`color: ${badgeColor}; border-left-color: ${badgeColor};`}>{badge}</span>}
-          <h1 class="text-base font-semibold text-base-content/80 leading-snug">{title}</h1>
+          <h2 class="text-base font-semibold text-base-content/80 leading-snug">{title}</h2>
         </div>
         <p class="text-sm text-base-content/60 leading-relaxed">{desc}</p>
         {tags && tags.length > 0 && (

@@ -38,35 +38,39 @@ const works = [
     <p class="text-base-content/40 text-sm mb-10">用 AI 做出来的东西，是最好的能力证明</p>
 
     <div class="lab-grid">
-      {works.map((work) => (
-        <a
-          href={work.highlight ? `/ai-lab/${work.id}` : undefined}
-          class:list={["lab-card", { "lab-card--active": work.highlight, "lab-card--soon": !work.highlight }]}
-        >
-          <div class="lab-card__cover">
-            {work.cover ? (
-              <img src={work.cover} alt={work.title} class="lab-card__img" />
-            ) : (
-              <div class="lab-card__placeholder">
-                <span>🧪</span>
-              </div>
-            )}
-            <span class:list={["lab-card__status", { "lab-card__status--live": work.status === "已上线" }]}>
-              {work.status}
-            </span>
-          </div>
-          <div class="lab-card__body">
-            <h3 class="lab-card__title">{work.title}</h3>
-            <p class="lab-card__summary">{work.summary}</p>
-            <div class="lab-card__tools">
-              {work.tools.map((t) => (
-                <span class="lab-card__tool">{t}</span>
-              ))}
+      {works.map((work) => {
+        const Wrapper = work.highlight ? 'a' : 'div';
+        const wrapperProps = work.highlight ? { href: `/ai-lab/${work.id}` } : {};
+        return (
+          <Wrapper
+            {...wrapperProps}
+            class:list={["lab-card", { "lab-card--active": work.highlight, "lab-card--soon": !work.highlight }]}
+          >
+            <div class="lab-card__cover">
+              {work.cover ? (
+                <img src={work.cover} alt={work.title} class="lab-card__img" loading="lazy" />
+              ) : (
+                <div class="lab-card__placeholder">
+                  <span>🧪</span>
+                </div>
+              )}
+              <span class:list={["lab-card__status", { "lab-card__status--live": work.status === "已上线" }]}>
+                {work.status}
+              </span>
             </div>
-          </div>
-          {work.highlight && <span class="lab-card__arrow">→</span>}
-        </a>
-      ))}
+            <div class="lab-card__body">
+              <h3 class="lab-card__title">{work.title}</h3>
+              <p class="lab-card__summary">{work.summary}</p>
+              <div class="lab-card__tools">
+                {work.tools.map((t) => (
+                  <span class="lab-card__tool">{t}</span>
+                ))}
+              </div>
+            </div>
+            {work.highlight && <span class="lab-card__arrow">→</span>}
+          </Wrapper>
+        );
+      })}
     </div>
   </div>
 </BaseLayout>
