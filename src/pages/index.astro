@@ -133,6 +133,17 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
       var nextBtn = document.getElementById('carousel-next');
       if (!track || dots.length === 0) return;
 
+      // Count real slides (excluding placeholders would be a design choice;
+      // here we guard against the degenerate case of a single slide total).
+      var slides = track.querySelectorAll('.home-carousel__slide');
+      if (slides.length <= 1) {
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+        var dotsEl = document.getElementById('home-carousel-dots');
+        if (dotsEl) dotsEl.style.display = 'none';
+        return;
+      }
+
       var current = 0;
       var total = dots.length;
       var timer;

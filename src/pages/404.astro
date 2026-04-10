@@ -1,0 +1,46 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="页面不存在" enablePageScroll={false}>
+  <div class="not-found">
+    <h1 class="not-found__title">页面不存在</h1>
+    <p class="not-found__text">抱歉，你访问的页面走丢了。</p>
+    <a href="/" class="not-found__link">← 返回首页</a>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found {
+    max-width: 32rem;
+    margin: 4rem auto;
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+
+  .not-found__title {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #222222;
+    margin-bottom: 0.75rem;
+  }
+
+  .not-found__text {
+    font-size: 0.9rem;
+    color: #6a6a6a;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .not-found__link {
+    display: inline-block;
+    font-size: 0.88rem;
+    color: #ff385c;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .not-found__link:hover {
+    opacity: 0.75;
+  }
+</style>

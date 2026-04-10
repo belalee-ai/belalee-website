@@ -11,8 +11,8 @@ const { title, summary, accentColor, details } = Astro.props;
 <div class="collapse collapse-arrow bg-base-200 mb-3">
   <input type="checkbox" aria-label={`展开 ${title}`} />
   <div class="collapse-title">
-    <div class="font-semibold" style={`color: ${accentColor || '#ff385c'};`}>{title}</div>
-    <p class="text-sm text-base-content/60 mt-1">{summary}</p>
+    <div class="font-semibold" style={`color: ${accentColor || '#ff385c'}; word-break: break-word; overflow-wrap: break-word;`}>{title}</div>
+    <p class="text-sm text-base-content/60 mt-1" style="word-break: break-word; overflow-wrap: break-word;">{summary}</p>
   </div>
   <div class="collapse-content">
     <ul class="list-disc list-inside space-y-2 text-sm">
