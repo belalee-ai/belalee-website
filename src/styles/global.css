@@ -1,3 +1,19 @@
+/* Brand color tokens — Sunset Lite palette
+   --brand-grad     : gradient for backgrounds (hero CTA, lab pills, carousel arrow hover, ring glow)
+   --brand-text     : solid rose for text / borders / small dots on white
+   --brand-text-rgb : same color as space-separated rgb channels, for rgb(... / alpha) tints
+   --brand-deep     : deeper rose for hover states and gradient bar ends
+   --ink-on-brand   : dark text color sitting on top of the light gradient
+   --brand-card     : very pale tint of the gradient for card backgrounds on white pages */
+:root {
+  --brand-grad: linear-gradient(135deg, #ffa6ce, #ffae72);
+  --brand-text: #c8537a;
+  --brand-text-rgb: 200 83 122;
+  --brand-deep: #a8446c;
+  --ink-on-brand: #4a1f30;
+  --brand-card: linear-gradient(135deg, #ffe6f1, #ffe8dc);
+}
+
 /* Timeline last-child fix */
 .time-line-container>div:last-child .education__time>.education__line {
   display: none;
@@ -37,12 +53,17 @@ h1, h2, h3, .text-3xl, .text-4xl {
   scroll-behavior: smooth;
 }
 
-/* Hero section — white canvas */
+/* Hero section — soft tinted card on white page */
 .hero-gradient {
-  background: #ffffff;
+  background: var(--brand-card);
   border-radius: 32px;
-  padding: 3.5rem 1.5rem 3rem;
-  box-shadow: rgba(0,0,0,0.02) 0px 0px 0px 1px;
+  padding: 4.25rem 2rem 3.75rem;
+  box-shadow: rgba(0,0,0,0.04) 0px 0px 0px 1px, rgba(0,0,0,0.03) 0px 4px 16px;
+}
+
+.hero-gradient h1 {
+  font-size: 3rem;
+  line-height: 1.15;
 }
 
 .hero-btn {
@@ -52,16 +73,18 @@ h1, h2, h3, .text-3xl, .text-4xl {
 }
 
 .hero-btn-primary {
-  background: #ff385c;
-  color: #ffffff;
+  background: var(--brand-grad);
+  color: var(--ink-on-brand);
   border: none;
   position: relative;
   overflow: hidden;
+  transition: filter 200ms cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 200ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .hero-btn-primary:hover {
-  background: #e00b41;
-  box-shadow: 0 4px 12px rgba(255, 56, 92, 0.25);
+  filter: brightness(0.94) saturate(1.1);
+  box-shadow: 0 4px 14px rgb(var(--brand-text-rgb) / 0.3);
+  transform: translateY(-1px);
 }
 
 /* Home sections layout */
@@ -85,7 +108,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 }
 
 .home-section__title {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #222222;
 }
@@ -98,7 +121,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 }
 
 .home-section__more:hover {
-  color: #ff385c;
+  color: var(--brand-text);
 }
 
 /* Home carousel */
@@ -155,8 +178,8 @@ h1, h2, h3, .text-3xl, .text-4xl {
 }
 
 .carousel-arrow:hover {
-  background: #ff385c;
-  color: #fff;
+  background: var(--brand-grad);
+  color: var(--ink-on-brand);
 }
 
 .carousel-arrow--left {
@@ -189,7 +212,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 }
 
 .home-carousel__dot.active {
-  background: #ff385c;
+  background: var(--brand-text);
   transform: scaleX(1);
   border-radius: 3px;
   background-clip: content-box;
@@ -218,7 +241,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 }
 
 .home-lab-card__body {
-  padding: 0.75rem 0.85rem;
+  padding: 0.9rem 1rem;
 }
 
 .home-lab-card__status {
@@ -226,8 +249,8 @@ h1, h2, h3, .text-3xl, .text-4xl {
   font-weight: 600;
   padding: 0.12rem 0.4rem;
   border-radius: 1rem;
-  background: #ff385c;
-  color: #fff;
+  background: var(--brand-grad);
+  color: var(--ink-on-brand);
 }
 
 .home-lab-card__status--soon {
@@ -236,17 +259,17 @@ h1, h2, h3, .text-3xl, .text-4xl {
 }
 
 .home-lab-card__title {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #222222;
-  margin-top: 0.4rem;
+  margin-top: 0.45rem;
 }
 
 .home-lab-card__desc {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: #6a6a6a;
-  margin-top: 0.2rem;
-  line-height: 1.45;
+  margin-top: 0.25rem;
+  line-height: 1.5;
 }
 
 .home-lab-card__tools {
@@ -272,8 +295,8 @@ h1, h2, h3, .text-3xl, .text-4xl {
 .home-insight-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.7rem 0.75rem;
+  gap: 0.85rem;
+  padding: 0.85rem 0.9rem;
   border-radius: 8px;
   text-decoration: none;
   transition: background-color 250ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -311,7 +334,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 }
 
 .home-insight-title {
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   color: #222222;
   font-weight: 500;
   flex: 1;
@@ -322,7 +345,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 .home-insight-arrow {
   font-size: 0.75rem;
-  color: #ff385c;
+  color: var(--brand-text);
   opacity: 0;
   transform: translateX(-4px);
   transition: opacity 250ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -342,7 +365,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 }
 
 .home-insights-more:hover {
-  color: #ff385c;
+  color: var(--brand-text);
 }
 
 /* Blog card row hover + arrow */
@@ -360,7 +383,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 .card-row-arrow {
   font-size: 1.4rem;
-  color: #ff385c;
+  color: var(--brand-text);
   opacity: 0;
   transform: translateX(-6px);
   transition: opacity 250ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -378,7 +401,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
   flex-shrink: 0;
   font-size: 0.625rem;
   font-weight: 600;
-  color: #ff385c;
+  color: var(--brand-text);
   padding: 0.1rem 0 0.1rem 0.5rem;
   letter-spacing: 0.04em;
 }
@@ -399,7 +422,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 }
 
 .card-tag-link:hover {
-  color: #ff385c;
+  color: var(--brand-text);
 }
 
 .card-tag-sep {
@@ -457,7 +480,7 @@ a:hover .card {
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  background: linear-gradient(180deg, rgba(255,56,92,0.18), rgba(255,56,92,0.04));
+  background: linear-gradient(180deg, rgb(var(--brand-text-rgb) / 0.50), rgb(var(--brand-text-rgb) / 0.12));
   opacity: 0;
   animation: ringReveal 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) 0.3s forwards;
 }
@@ -536,11 +559,11 @@ a:hover .card {
 }
 
 .sidebar-bg .menu a:hover .sidebar-icon {
-  color: #ff385c;
+  color: var(--brand-text);
 }
 
 .sidebar-bg .menu a.sidebar-active .sidebar-icon {
-  color: #ff385c;
+  color: var(--brand-text);
 }
 
 .sidebar-bg .menu a {
@@ -556,8 +579,8 @@ a:hover .card {
 }
 
 .sidebar-bg .menu a.sidebar-active {
-  background: rgba(255,56,92,0.08);
-  color: #ff385c;
+  background: rgb(var(--brand-text-rgb) / 0.10);
+  color: var(--brand-text);
   font-weight: 500;
 }
 

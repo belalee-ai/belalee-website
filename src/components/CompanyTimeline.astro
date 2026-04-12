@@ -13,7 +13,7 @@ const { items } = Astro.props;
 <div class="relative pl-8 border-l-2 border-[#c1c1c1]">
   {items.map((item, i) => (
     <div class={`relative pb-8 ${i === items.length - 1 ? 'pb-0' : ''}`}>
-      <div class="absolute -left-[25px] w-4 h-4 rounded-full bg-[#ff385c] border-2 border-base-100"></div>
+      <div class="absolute -left-[25px] w-4 h-4 rounded-full border-2 border-base-100" style="background: var(--brand-grad);"></div>
       <div class="flex items-center gap-2 flex-wrap" style="overflow-wrap: break-word; word-break: break-word;">
         <span class="text-sm font-bold">{item.period}</span>
         <span class="text-base-content/30">·</span>
