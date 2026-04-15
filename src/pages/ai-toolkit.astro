@@ -1,0 +1,489 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { parseSkillsInventory } from "../lib/parseSkillsInventory";
+import fs from "node:fs";
+import path from "node:path";
+
+const inventoryPath = path.resolve("src/data/skills-inventory.md");
+const inventoryMd = fs.readFileSync(inventoryPath, "utf-8");
+const inventory = parseSkillsInventory(inventoryMd);
+
+const totalSkills = inventory.reduce(
+  (sum, cat) => sum + cat.subcategories.reduce((s, sub) => s + sub.skills.length, 0),
+  0,
+);
+
+const TAG_LIMIT = 10;
+
+const subIcons: Record<string, string> = {
+  "Content Creation": "✍️",
+  "Video & Storyboard": "🎬",
+  "Presentation": "📊",
+  "Web & Research": "🔍",
+  "Superpowers": "⚡",
+  "Vercel Platform": "▲",
+  "Figma": "🎨",
+  "Chrome DevTools": "🛠",
+  "Other Official Skills": "📦",
+};
+
+function getSubIcon(titleEn: string, title: string): string {
+  return subIcons[titleEn] || subIcons[title] || "📌";
+}
+
+function getSourceUrl(source?: string): string | null {
+  if (!source) return null;
+  const match = source.match(/^([a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)/);
+  if (match) return `https://github.com/${match[1]}`;
+  return null;
+}
+
+function getSourceLabel(source?: string): string {
+  if (!source) return "";
+  return source.replace(/\s*\(.*\)$/, "").trim();
+}
+---
+
+<BaseLayout sideBarActiveItemID="ai-toolkit">
+  <div class="pb-12 mt-5">
+    <div class="tk-top">
+      <div>
+        <div class="text-3xl font-bold mb-1">AI 工具箱</div>
+        <p class="text-base-content/40 text-sm">我收藏的 Claude Code Skill 合集 · 点击名称可复制</p>
+      </div>
+      <span class="tk-badge">{totalSkills} skills</span>
+    </div>
+
+    {inventory.map((cat, catIdx) => (
+      <section class="tk-cat">
+        <h2 class="tk-cat__title">{cat.title}</h2>
+        {cat.subcategories.map((sub) => {
+          const hasMore = sub.skills.length > TAG_LIMIT;
+          const isCustomCat = catIdx === 0; // First category = Custom Skills
+          return (
+            <div class="tk-sub">
+              <div class="tk-sub__header">
+                <span class="tk-sub__icon">{getSubIcon(sub.titleEn, sub.title)}</span>
+                <span class="tk-sub__name">{sub.title}</span>
+                {sub.titleEn && <span class="tk-sub__en">{sub.titleEn}</span>}
+                <span class="tk-sub__count">{sub.skills.length}</span>
+              </div>
+              <div class="tk-tags" data-limit={hasMore ? TAG_LIMIT : undefined}>
+                {sub.skills.map((skill, i) => {
+                  const isCustom = isCustomCat && (!skill.source || skill.source === "Custom");
+                  const srcUrl = getSourceUrl(skill.source);
+                  const srcLabel = getSourceLabel(skill.source);
+                  return (
+                    <button
+                      class={`tk-tag ${hasMore && i >= TAG_LIMIT ? "tk-tag--hidden" : ""}`}
+                      data-copy={skill.name}
+                      data-desc={skill.trigger}
+                      data-src-url={srcUrl || undefined}
+                      data-src-label={srcLabel || undefined}
+                    >
+                      {skill.name}{isCustom && <span class="tk-tag__custom">自研</span>}
+                    </button>
+                  );
+                })}
+                {hasMore && (
+                  <button class="tk-expand" data-total={sub.skills.length}>
+                    展开全部 ({sub.skills.length})
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </section>
+    ))}
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('click', function (e) {
+    // Expand / collapse tags
+    var expandBtn = e.target.closest('.tk-expand');
+    if (expandBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      var container = expandBtn.closest('.tk-tags');
+      if (!container) return;
+      var isExpanded = container.classList.toggle('tk-tags--expanded');
+      var total = expandBtn.getAttribute('data-total');
+      expandBtn.textContent = isExpanded ? '收起' : '展开全部 (' + total + ')';
+      return;
+    }
+
+    // Detail card: copy button
+    var copyBtn = e.target.closest('.tk-detail__copy');
+    if (copyBtn) {
+      e.stopPropagation();
+      var name = copyBtn.getAttribute('data-name');
+      if (!name) return;
+      navigator.clipboard.writeText(name).then(function () {
+        copyBtn.textContent = '已复制';
+        setTimeout(function () { copyBtn.textContent = '复制'; }, 1200);
+      });
+      return;
+    }
+
+    // Don't close detail when clicking inside it (unless it's a link)
+    if (e.target.closest('.tk-detail-wrap') && !e.target.closest('.tk-detail__copy') && !e.target.closest('a')) return;
+
+    // Click tag → toggle detail card
+    var tag = e.target.closest('.tk-tag');
+    var existing = document.querySelector('.tk-detail-wrap');
+
+    // Animate-close helper
+    function closeDetail(wrap) {
+      wrap.classList.remove('tk-detail-wrap--open');
+      setTimeout(function () { wrap.remove(); }, 300);
+    }
+
+    // Close any open detail
+    if (existing) {
+      var prevTag = existing._tag;
+      if (!tag || prevTag === tag) {
+        closeDetail(existing);
+        return;
+      }
+      existing.remove(); // instant swap when switching
+    }
+
+    if (!tag) return;
+
+    var name = tag.getAttribute('data-copy') || '';
+    var desc = tag.getAttribute('data-desc') || '';
+    var srcUrl = tag.getAttribute('data-src-url') || '';
+    var srcLabel = tag.getAttribute('data-src-label') || '';
+
+    // Build detail card with wrapper
+    var wrap = document.createElement('div');
+    wrap.className = 'tk-detail-wrap';
+    wrap._tag = tag;
+
+    var sourceHtml = '';
+    if (srcUrl) {
+      sourceHtml = '<div class="tk-detail__source">来源：<a href="' + srcUrl + '" target="_blank" rel="noopener noreferrer">' + srcLabel + ' <span class="tk-detail__arrow">↗</span></a></div>';
+    } else if (srcLabel) {
+      sourceHtml = '<div class="tk-detail__source">来源：' + srcLabel + '</div>';
+    }
+
+    wrap.innerHTML = '<div class="tk-detail-inner"><div class="tk-detail">'
+      + '<div class="tk-detail__header">'
+      + '<code class="tk-detail__name">' + name + '</code>'
+      + '<button class="tk-detail__copy" data-name="' + name + '">复制</button>'
+      + '</div>'
+      + '<p class="tk-detail__desc">' + desc + '</p>'
+      + sourceHtml
+      + '</div></div>';
+
+    // Insert after the tag's parent .tk-tags container
+    var tagsContainer = tag.closest('.tk-tags');
+    if (tagsContainer) {
+      tagsContainer.parentNode.insertBefore(wrap, tagsContainer.nextSibling);
+      // Trigger open on next frame so the transition plays
+      requestAnimationFrame(function () {
+        wrap.classList.add('tk-detail-wrap--open');
+      });
+    }
+  });
+</script>
+
+<style>
+  .tk-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .tk-badge {
+    font-size: 0.72rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 2rem;
+    background: rgb(var(--brand-text-rgb) / 0.08);
+    color: var(--brand-text);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    margin-top: 0.35rem;
+  }
+
+  /* ── Category ── */
+  .tk-cat {
+    margin-bottom: 2.5rem;
+  }
+
+  .tk-cat__title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--brand-text);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1.5px solid rgba(0,0,0,0.08);
+  }
+
+  /* ── Subcategory ── */
+  .tk-sub {
+    margin-bottom: 1.5rem;
+  }
+
+  .tk-sub__header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .tk-sub__icon {
+    font-size: 0.95rem;
+  }
+
+  .tk-sub__name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #222;
+  }
+
+  .tk-sub__en {
+    font-size: 0.7rem;
+    color: #999;
+  }
+
+  .tk-sub__count {
+    margin-left: auto;
+    font-size: 0.62rem;
+    padding: 0.12rem 0.4rem;
+    border-radius: 2rem;
+    background: rgba(0,0,0,0.04);
+    color: #6a6a6a;
+    font-weight: 600;
+  }
+
+  /* ── Tag wall ── */
+  .tk-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    align-items: center;
+  }
+
+  .tk-tag {
+    font-size: 0.72rem;
+    font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+    padding: 0.3rem 0.65rem;
+    border-radius: 6px;
+    background: rgba(var(--brand-text-rgb) / 0.06);
+    color: var(--brand-text);
+    border: 1px solid rgba(var(--brand-text-rgb) / 0.15);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    position: relative;
+  }
+
+  .tk-tag:hover {
+    background: var(--brand-text);
+    color: #fff;
+    border-color: var(--brand-text);
+  }
+
+  .tk-tag--copied {
+    background: #222 !important;
+    color: #fff !important;
+    border-color: #222 !important;
+  }
+
+  /* "自研" badge inside custom tags */
+  .tk-tag__custom {
+    font-size: 0.55rem;
+    font-family: -apple-system, sans-serif;
+    background: var(--brand-text);
+    color: #fff;
+    padding: 0.08rem 0.3rem;
+    border-radius: 3px;
+    margin-left: 0.35rem;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    vertical-align: middle;
+  }
+
+  .tk-tag:hover .tk-tag__custom {
+    background: #fff;
+    color: var(--brand-text);
+  }
+
+  /* Hidden tags (beyond limit) */
+  .tk-tag--hidden {
+    display: none;
+  }
+
+  .tk-tags--expanded .tk-tag--hidden {
+    display: inline-flex;
+  }
+
+  /* ── Tooltip ── */
+  .tk-tag::after {
+    content: attr(data-desc);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: #fff;
+    font-size: 0.68rem;
+    font-family: -apple-system, sans-serif;
+    padding: 0.4rem 0.65rem;
+    border-radius: 6px;
+    white-space: normal;
+    text-align: center;
+    max-width: 260px;
+    line-height: 1.45;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    z-index: 10;
+  }
+
+  .tk-tag::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #222;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    z-index: 10;
+  }
+
+  .tk-tag:hover::after,
+  .tk-tag:hover::before {
+    opacity: 1;
+  }
+
+  /* ── Expand / collapse button ── */
+  .tk-expand {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    background: none;
+    border: 1px dashed #ccc;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .tk-expand:hover {
+    color: var(--brand-text);
+    border-color: var(--brand-text);
+  }
+
+  /* ── Detail card (click to expand) ── */
+  /* Wrapper handles height animation via grid trick */
+  .tk-detail-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    margin-top: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tk-detail-wrap--open {
+    grid-template-rows: 1fr;
+  }
+
+  .tk-detail-inner {
+    overflow: hidden;
+  }
+
+  .tk-detail {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-left: 3px solid var(--brand-text);
+    border-radius: 0 10px 10px 0;
+    padding: 0.85rem 1rem;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .tk-detail-wrap--open .tk-detail {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .tk-detail__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+  }
+
+  .tk-detail__name {
+    font-size: 0.8rem;
+    font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+    color: var(--brand-text);
+    font-weight: 600;
+  }
+
+  .tk-detail__copy {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.04);
+    border: 1px solid #e5e5e5;
+    color: #6a6a6a;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .tk-detail__copy:hover {
+    background: var(--brand-text);
+    color: #fff;
+    border-color: var(--brand-text);
+  }
+
+  .tk-detail__desc {
+    font-size: 0.78rem;
+    color: #222;
+    line-height: 1.6;
+    margin: 0 0 0.4rem;
+  }
+
+  .tk-detail__source {
+    font-size: 0.7rem;
+    color: #999;
+  }
+
+  .tk-detail__source a {
+    color: var(--brand-text);
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+
+  .tk-detail__source a:hover {
+    opacity: 0.7;
+  }
+
+  .tk-detail__arrow {
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .tk-top {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .tk-badge {
+      margin-top: 0;
+      align-self: flex-start;
+    }
+  }
+</style>

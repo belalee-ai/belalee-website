@@ -24,7 +24,7 @@ body {
   font-family: 'Noto Sans SC', 'Plus Jakarta Sans', system-ui, sans-serif;
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 h1, h2, h3, .text-3xl, .text-4xl {
