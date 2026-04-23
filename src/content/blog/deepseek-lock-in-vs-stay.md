@@ -158,6 +158,41 @@ DeepSeek 要融资了，估值 200 亿美金。看到这条消息，我的第一
 
 他们在设计权益、做活动、优化留存流程的时候，解决的都是「留下来」的问题——怎么让用户今天不走，怎么让用户这个月还在。这些都对，都必要。
 
+<div class="design-figure">
+<div class="design-figure__title">大多数产品的留存工作都停在这里</div>
+<svg viewBox="0 0 560 140" xmlns="http://www.w3.org/2000/svg" style="font-family: system-ui, sans-serif;">
+  <defs>
+    <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+  </defs>
+  <!-- Box 1 -->
+  <rect x="20" y="30" width="110" height="60" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="75" y="56" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">权益设计</text>
+  <text x="75" y="75" text-anchor="middle" font-size="10" fill="#94a3b8">会员 / 积分 / 福利</text>
+  <!-- Arrow -->
+  <line x1="132" y1="60" x2="158" y2="60" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr2)"/>
+  <!-- Box 2 -->
+  <rect x="160" y="30" width="110" height="60" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="215" y="56" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">活动运营</text>
+  <text x="215" y="75" text-anchor="middle" font-size="10" fill="#94a3b8">促销 / Push / 活动</text>
+  <!-- Arrow -->
+  <line x1="272" y1="60" x2="298" y2="60" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr2)"/>
+  <!-- Box 3 -->
+  <rect x="300" y="30" width="110" height="60" rx="6" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="355" y="56" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">留存优化</text>
+  <text x="355" y="75" text-anchor="middle" font-size="10" fill="#94a3b8">A/B / 流失预警</text>
+  <!-- Arrow to result -->
+  <line x1="412" y1="60" x2="438" y2="60" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr2)"/>
+  <!-- Result box with crack -->
+  <rect x="440" y="22" width="100" height="76" rx="6" fill="#fef9c3" stroke="#fbbf24" stroke-width="1.5"/>
+  <text x="490" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e">留下来</text>
+  <text x="490" y="70" text-anchor="middle" font-size="10" fill="#b45309">✓ 但随时</text>
+  <text x="490" y="84" text-anchor="middle" font-size="10" fill="#b45309">可以走</text>
+  <!-- Question tag -->
+  <text x="490" y="116" text-anchor="middle" font-size="22" font-weight="900" fill="#ef4444">?</text>
+  <text x="357" y="116" text-anchor="middle" font-size="10" fill="#94a3b8">绝大多数产品的留存体系终点</text>
+</svg>
+</div>
+
 但「走不掉」的设计是另一层，它问的是另一个问题：
 
 > 你的产品里，有没有哪个功能或者哪套流程，是用户用了足够久之后，他的解决问题的方式被你塑造了，换掉你需要付出真实代价的？
@@ -169,3 +204,13 @@ DeepSeek 要融资了，估值 200 亿美金。看到这条消息，我的第一
 DeepSeek 被说免费，说商业模式不清晰，说是烧钱换影响力。但它估值 200 亿的底气，藏在那些开发者的代码库里，藏在那一行行接入 API 的调用里。那些代码才是它真正的护城河，不是用户数，不是 DAU，是换掉它的代价。
 
 **你的产品里，有没有那行代码？**
+
+---
+
+## 数据来源
+
+- 幻方科技管理规模、年净利数据：虎嗅《幻方科技深度报道》2025 / 业内公开估算
+- DeepSeek 估值 200 亿美金：The Information 独家报道，2026.04.22，腾讯阿里三方均未官方确认
+- DeepSeek API 定价 $0.28/M tokens：[DeepSeek 官方定价页](https://platform.deepseek.com/api-docs/pricing)，2026.04
+- OpenAI GPT-4o 定价 $2.50/M tokens：[OpenAI API Pricing](https://openai.com/api/pricing)，2026.04
+- 图表数据与框架：作者根据美图 7 年产品实践整理，不代表美图官方数据
