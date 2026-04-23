@@ -10,6 +10,34 @@ DeepSeek 要融资了，估值 200 亿美金。看到这条消息，我的第一
 
 但我查了一下幻方科技的体量。量化私募，管理规模超过 700 亿人民币，一年净利大概在 50 亿量级。他们根本不差这点钱。业内的主流判断是这笔融资为了给核心研究员做期权定价，不是因为活不下去了。
 
+<div class="design-figure">
+<div class="design-figure__title">幻方科技 × DeepSeek 规模一览</div>
+<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="font-family: system-ui, sans-serif;">
+  <rect x="0" y="0" width="560" height="200" rx="8" fill="#0f172a"/>
+  <!-- Card 1: 管理规模 -->
+  <rect x="20" y="24" width="155" height="152" rx="6" fill="#1e293b"/>
+  <text x="97" y="56" text-anchor="middle" font-size="11" fill="#94a3b8">幻方科技管理规模</text>
+  <text x="97" y="100" text-anchor="middle" font-size="32" font-weight="800" fill="#f8fafc">700亿</text>
+  <text x="97" y="124" text-anchor="middle" font-size="11" fill="#64748b">人民币</text>
+  <rect x="36" y="142" width="123" height="20" rx="3" fill="#0f172a"/>
+  <text x="97" y="156" text-anchor="middle" font-size="10" fill="#475569">量化私募 AUM</text>
+  <!-- Card 2: 年净利 -->
+  <rect x="200" y="24" width="155" height="152" rx="6" fill="#1e293b"/>
+  <text x="278" y="56" text-anchor="middle" font-size="11" fill="#94a3b8">幻方年净利润（估）</text>
+  <text x="278" y="100" text-anchor="middle" font-size="32" font-weight="800" fill="#f8fafc">50亿</text>
+  <text x="278" y="124" text-anchor="middle" font-size="11" fill="#64748b">人民币 / 年</text>
+  <rect x="216" y="142" width="123" height="20" rx="3" fill="#0f172a"/>
+  <text x="278" y="156" text-anchor="middle" font-size="10" fill="#475569">覆盖 DeepSeek 研发投入</text>
+  <!-- Card 3: DeepSeek 估值 -->
+  <rect x="380" y="24" width="160" height="152" rx="6" fill="#1c3a2e"/>
+  <text x="460" y="56" text-anchor="middle" font-size="11" fill="#6ee7b7">DeepSeek 融资估值</text>
+  <text x="460" y="96" text-anchor="middle" font-size="28" font-weight="800" fill="#4ade80">$200亿</text>
+  <text x="460" y="118" text-anchor="middle" font-size="11" fill="#86efac">美金</text>
+  <rect x="396" y="142" width="128" height="20" rx="3" fill="#14532d"/>
+  <text x="460" y="156" text-anchor="middle" font-size="10" fill="#4ade80">≈ 1,450 亿人民币</text>
+</svg>
+</div>
+
 那问题就来了。一个永远不向用户收钱、母公司还不差钱的产品，腾讯阿里为什么要抢着给它 200 亿的估值？
 
 ---
