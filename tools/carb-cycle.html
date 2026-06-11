@@ -241,6 +241,7 @@
     <div class="field"><label>身高 cm</label><input id="height" type="number" min="120" max="220"></div>
     <div class="field"><label>体重 kg（每周更新）</label><input id="weight" type="number" step="0.1" min="30" max="200"></div>
     <div class="field"><label>体脂率 %（选填）</label><input id="bodyfat" type="number" step="0.5" min="5" max="60" placeholder="不知道可留空"></div>
+    <div class="field"><label>目标体重 kg</label><input id="goalWeight" type="number" step="0.5" min="30" max="200"></div>
     <div class="field"><label>目标</label>
       <select id="goal">
         <option value="cut_keep">减脂保肌</option>
@@ -261,13 +262,14 @@
 <p class="disclaimer">
   ⚠️ 本工具为饮食<strong>预估参考</strong>，不是医嘱。所有数字以你实际执行两周后的体重与状态变化来校准：
   两周体重纹丝不动 → 各档热量下调 5–8%；掉得太快（&gt;0.7kg/周）或训练没力气 → 上调。忌口：示例已排除猪肉。
+  另：开始碳循环的第一周，糖原和水分会先掉 0.5–1kg——秤上掉得快是正常的，那不是脂肪，也不代表后面都这么快。
 </p>
 
 <script>
 /* ================= 数据 ================= */
 const DAYS = ['周一','周二','周三','周四','周五','周六','周日'];
 const DEFAULTS = {
-  sex: 'f', age: 29, height: 158, weight: 55.1, bodyfat: 25,
+  sex: 'f', age: 29, height: 158, weight: 55.1, bodyfat: 25, goalWeight: 52.5,
   goal: 'cut_keep', skcal: 500, ckcal: 500,
   // 周一力量 / 周二有氧 / 周三力量 / 周四有氧 / 周五力量 / 周六休息 / 周日有氧
   plan: ['strength','cardio','strength','cardio','strength','rest','cardio'],
@@ -416,9 +418,21 @@ function render() {
     <div class="cell"><div class="big">${avgTdee}</div><div class="lbl">日均总消耗 kcal</div></div>
     <div class="cell"><div class="big">${avgKcal}</div><div class="lbl">日均摄入 kcal</div></div>
     <div class="cell"><div class="big">${defPct > 0 ? '−' + defPct + '%' : '+' + (-defPct) + '%'}</div><div class="lbl">周平均${defPct > 0 ? '缺口' : '盈余'}</div></div>
-    <div class="cell"><div class="big">${loss > 0 ? loss.toFixed(2) : (-loss).toFixed(2)} kg</div><div class="lbl">预计每周${loss > 0 ? '减重' : '增重'}</div></div>`;
+    <div class="cell"><div class="big">${loss > 0 ? loss.toFixed(2) : (-loss).toFixed(2)} kg</div><div class="lbl">预计每周${loss > 0 ? '减重' : '增重'}</div></div>
+    ${goalCell(loss)}`;
 
   bindEvents();
+}
+
+/* 目标体重预估：纯脂肪口径，第一周另有 0.5-1kg 糖原水分先掉（秤上更快） */
+function goalCell(lossPerWeek) {
+  const gw = parseFloat(state.goalWeight), w = +state.weight;
+  if (isNaN(gw) || gw <= 0) return '';
+  const diff = w - gw;
+  if (diff <= 0) return `<div class="cell"><div class="big">✓ 已达标</div><div class="lbl">目标 ${gw} kg</div></div>`;
+  if (lossPerWeek <= 0) return `<div class="cell"><div class="big">—</div><div class="lbl">当前为盈余，不会减重</div></div>`;
+  const weeks = Math.ceil(diff / lossPerWeek);
+  return `<div class="cell"><div class="big">约 ${weeks} 周</div><div class="lbl">到 ${gw} kg（脂肪口径，第一周水分另掉 0.5-1kg）</div></div>`;
 }
 
 function bindEvents() {
@@ -435,7 +449,7 @@ function bindEvents() {
 }
 
 // 顶部输入
-['sex','age','height','weight','bodyfat','goal','skcal','ckcal'].forEach(id => {
+['sex','age','height','weight','bodyfat','goalWeight','goal','skcal','ckcal'].forEach(id => {
   const el = document.getElementById(id);
   el.value = state[id] ?? '';
   el.addEventListener('input', () => {
