@@ -71,7 +71,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     gap: 1rem;
     padding: 0.9rem 1.1rem;
     border-radius: 14px;
-    border: 1px solid #e5e5e5;
+    border: 1px solid var(--line);
     background: transparent;
     text-decoration: none;
     transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -80,7 +80,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .contact-item:hover {
     background: rgba(0,0,0,0.02);
-    border-color: #c1c1c1;
+    border-color: var(--ink-faint);
     box-shadow: rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px;
     transform: translateX(4px);
   }
@@ -92,24 +92,24 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    background: #f2f2f2;
-    color: #ff385c;
+    background: var(--surface);
+    color: var(--brand-text);
     flex-shrink: 0;
     transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
   }
 
   .contact-item:hover .contact-item__icon {
-    background: #ff385c;
-    color: #fff;
+    background: var(--brand-grad);
+    color: var(--ink-on-brand);
   }
 
   .contact-item__icon--xhs {
-    color: #ff385c;
+    color: var(--brand-text);
   }
 
   .contact-item:hover .contact-item__icon--xhs {
-    background: #ff385c;
-    color: #fff;
+    background: var(--brand-grad);
+    color: var(--ink-on-brand);
   }
 
   .contact-item__body {
@@ -122,7 +122,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .contact-item__label {
     font-size: 0.65rem;
-    color: #6a6a6a;
+    color: var(--ink-soft);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     font-weight: 500;
@@ -130,7 +130,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .contact-item__value {
     font-size: 0.85rem;
-    color: #222222;
+    color: var(--ink);
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
@@ -139,7 +139,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .contact-item__arrow {
     font-size: 0.85rem;
-    color: #ff385c;
+    color: var(--brand-text);
     opacity: 0;
     transform: translateX(-6px);
     transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);

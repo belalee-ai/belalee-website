@@ -4,6 +4,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SideBar from "../components/SideBar.astro";
 import PageScroller from "../components/PageScroller.astro";
+import BackToTop from "../components/BackToTop.astro";
 import { ViewTransitions } from "astro:transitions";
 
 import { SITE_TITLE, SITE_DESCRIPTION, TRANSITION_API } from "../config";
@@ -38,8 +39,96 @@ const {
           </main>
         </div>
         <Footer />
+        <BackToTop />
       </div>
       {includeSidebar && <SideBar sideBarActiveItemID={sideBarActiveItemID} />}
     </div>
+
+    <script>
+      // 滚动逐节登场 + 数字跳动（全站共用，渐进增强：JS 不可用时内容原样显示）
+      document.addEventListener('astro:page-load', () => {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        /* ── 滚动 reveal：视野外的卡片/列表项先隐藏，进入视野时错峰浮现 ── */
+        const REVEAL_SELECTOR = [
+          '.home-insight-item', '.home-section', '.cv-highlight-card', '.cv-exp',
+          '.lab-card', '.contact-item', '.skill-card', '.case-step',
+          '.case-learning', '.case-decision', '.card-row', '.tk-cat',
+        ].join(',');
+
+        if (!reduced && 'IntersectionObserver' in window) {
+          const candidates = [...document.querySelectorAll(REVEAL_SELECTOR)]
+            .filter((el) => el.getBoundingClientRect().top > window.innerHeight * 0.92);
+
+          if (candidates.length > 0) {
+            let batchIndex = 0;
+            let lastTime = 0;
+            const io = new IntersectionObserver((entries) => {
+              const now = performance.now();
+              if (now - lastTime > 200) batchIndex = 0; // 新的一批，重新错峰
+              lastTime = now;
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                const el = entry.target;
+                el.style.transitionDelay = `${Math.min(batchIndex * 70, 350)}ms`;
+                el.classList.add('reveal-in');
+                io.unobserve(el);
+                batchIndex += 1;
+                // 登场结束后摘掉 reveal 类，把 transition 还给元素自己的 hover 动效
+                el.addEventListener('transitionend', () => {
+                  el.classList.remove('reveal', 'reveal-in');
+                  el.style.transitionDelay = '';
+                }, { once: true });
+              });
+            }, { threshold: 0.08, rootMargin: '0px 0px -4% 0px' });
+
+            candidates.forEach((el) => {
+              el.classList.add('reveal');
+              io.observe(el);
+            });
+          }
+        }
+
+        /* ── 数字跳动：[data-count] 进入视野时从 0 数到目标值 ── */
+        const counters = document.querySelectorAll('[data-count]');
+        if (counters.length === 0) return;
+
+        const renderFinal = (el) => {
+          el.textContent = (el.dataset.prefix || '') + el.dataset.count + (el.dataset.suffix || '');
+        };
+
+        if (reduced || !('IntersectionObserver' in window)) {
+          counters.forEach(renderFinal);
+          return;
+        }
+
+        const cio = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            cio.unobserve(el);
+            const target = parseFloat(el.dataset.count);
+            const prefix = el.dataset.prefix || '';
+            const suffix = el.dataset.suffix || '';
+            const dur = 1100;
+            const start = performance.now();
+            const step = (now) => {
+              const p = Math.min((now - start) / dur, 1);
+              const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+              const val = Math.round(target * eased);
+              el.textContent = prefix + val + suffix;
+              if (p < 1) requestAnimationFrame(step);
+              else renderFinal(el);
+            };
+            requestAnimationFrame(step);
+          });
+        }, { threshold: 0.4 });
+
+        counters.forEach((el) => {
+          el.textContent = (el.dataset.prefix || '') + '0' + (el.dataset.suffix || '');
+          cio.observe(el);
+        });
+      });
+    </script>
   </body>
 </html>

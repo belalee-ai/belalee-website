@@ -20,9 +20,9 @@ const { page } = Astro.props;
 
   {
     page.data.length === 0 ? (
-      <div style="border-left: 3px solid #e5e5e5; background: #f9f9f9; padding: 1rem 1.25rem; border-radius: 0 0.5rem 0.5rem 0;">
-        <p style="font-weight: 600; color: #222222; margin-bottom: 0.25rem;">还没有相关文章</p>
-        <p style="color: #6a6a6a; font-size: 0.88rem;">稍后再来看看吧。</p>
+      <div style="border-left: 3px solid var(--line); background: #f9f9f9; padding: 1rem 1.25rem; border-radius: 0 0.5rem 0.5rem 0;">
+        <p style="font-weight: 600; color: var(--ink); margin-bottom: 0.25rem;">还没有相关文章</p>
+        <p style="color: var(--ink-soft); font-size: 0.88rem;">稍后再来看看吧。</p>
       </div>
     ) : (
       <ul style="list-style: none; padding: 0; margin: 0;">

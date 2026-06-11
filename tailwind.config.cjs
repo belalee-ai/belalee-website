@@ -9,12 +9,14 @@ module.exports = {
 		themes: [
 			{
 				airbnb: {
-					"primary": "#ff385c",
+					/* 主题色与 src/styles/global.css 的 --brand-text 同源（Lemon Zest #4d7c0f）
+					   daisyUI 主题不支持 CSS 变量引用，改色时两处要一起改 */
+					"primary": "#4d7c0f",
 					"primary-content": "#ffffff",
 					"secondary": "#f2f2f2",
 					"secondary-content": "#222222",
-					"accent": "#ff385c",
-					"accent-content": "#ffffff",
+					"accent": "#8fd14f",
+					"accent-content": "#2b3d0f",
 					"neutral": "#222222",
 					"neutral-content": "#ffffff",
 					"base-100": "#ffffff",

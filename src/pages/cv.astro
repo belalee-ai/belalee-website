@@ -42,7 +42,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <h2 class="cv-section__title">工作经历</h2>
       <div class="cv-exp-list">
 
-        <div class="cv-exp" style="border-left-color: #e5e5e5;">
+        <div class="cv-exp" style="border-left-color: var(--line);">
           <div class="cv-exp__header">
             <h3 class="cv-exp__company">拼多多 & TEMU</h3>
             <span class="cv-exp__period">2022.09 - 2025.08</span>
@@ -51,7 +51,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <p class="cv-exp__desc">国内负责搜索全链路功能建设；海外带领 4-6 人团队负责 TEMU 欧洲区 Facebook 广告投放、活动玩法与用户转化。历年绩效优秀，主导项目多次获得业务线最佳实践。</p>
         </div>
 
-        <div class="cv-exp" style="border-left-color: #e5e5e5;">
+        <div class="cv-exp" style="border-left-color: var(--line);">
           <div class="cv-exp__header">
             <h3 class="cv-exp__company">美图秀秀</h3>
             <span class="cv-exp__period">2020.07 - 2022.09</span>
@@ -60,7 +60,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <p class="cv-exp__desc">主导会员体系搭建及订阅中台建设，付费收入提升 40%+。连续两年绩效 A，团队中唯一获「优秀员工」的产品经理。</p>
         </div>
 
-        <div class="cv-exp" style="border-left-color: #e5e5e5;">
+        <div class="cv-exp" style="border-left-color: var(--line);">
           <div class="cv-exp__header">
             <h3 class="cv-exp__company">瑞幸咖啡</h3>
             <span class="cv-exp__period">2019.04 - 2020.06</span>
@@ -69,7 +69,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <p class="cv-exp__desc">负责 APP 营销体系搭建与付费会员体系设计。入职首年即获年度绩效 A。</p>
         </div>
 
-        <div class="cv-exp cv-exp--gap" style="border-left-color: #c1c1c1;">
+        <div class="cv-exp cv-exp--gap" style="border-left-color: var(--ink-faint);">
           <div class="cv-exp__header">
             <h3 class="cv-exp__company">Career Break</h3>
             <span class="cv-exp__period">2025.09 - 至今</span>
@@ -119,7 +119,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    color: #ff385c;
+    color: var(--brand-text);
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 1.5px solid rgba(0,0,0,0.08);
@@ -140,7 +140,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .cv-highlight-card {
     background: #ffffff;
-    border: 1px solid #e5e5e5;
+    border: 1px solid var(--line);
     border-radius: 14px;
     padding: 1rem 1.15rem;
     transition: box-shadow 0.3s ease;
@@ -158,33 +158,33 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     margin-bottom: 0.35rem;
   }
 
-  .cv-highlight-card--mint .cv-highlight-card__label { color: #ff385c; }
-  .cv-highlight-card--amber .cv-highlight-card__label { color: #ff385c; }
-  .cv-highlight-card--indigo .cv-highlight-card__label { color: #ff385c; }
-  .cv-highlight-card--coral .cv-highlight-card__label { color: #ff385c; }
+  .cv-highlight-card--mint .cv-highlight-card__label { color: var(--brand-text); }
+  .cv-highlight-card--amber .cv-highlight-card__label { color: var(--brand-text); }
+  .cv-highlight-card--indigo .cv-highlight-card__label { color: var(--brand-text); }
+  .cv-highlight-card--coral .cv-highlight-card__label { color: var(--brand-text); }
 
-  .cv-highlight-card--mint { border-color: #e5e5e5; }
-  .cv-highlight-card--amber { border-color: #e5e5e5; }
-  .cv-highlight-card--indigo { border-color: #e5e5e5; }
-  .cv-highlight-card--coral { border-color: #e5e5e5; }
+  .cv-highlight-card--mint { border-color: var(--line); }
+  .cv-highlight-card--amber { border-color: var(--line); }
+  .cv-highlight-card--indigo { border-color: var(--line); }
+  .cv-highlight-card--coral { border-color: var(--line); }
 
   .cv-highlight-card__text {
     font-size: 0.82rem;
-    color: #222222;
+    color: var(--ink);
     line-height: 1.5;
   }
 
   /* 桥接说明 */
   .cv-bridge {
-    background: #f2f2f2;
-    border-left: 3px solid #ff385c;
+    background: rgb(var(--brand-bright-rgb) / 0.10);
+    border-left: 3px solid var(--brand-bright);
     border-radius: 0 14px 14px 0;
     padding: 1rem 1.25rem;
   }
 
   .cv-bridge__text {
     font-size: 0.82rem;
-    color: #222222;
+    color: var(--ink);
     line-height: 1.7;
     margin: 0;
   }
@@ -198,7 +198,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .cv-exp {
     padding: 1.15rem 1.25rem;
-    border-left: 3px solid #e5e5e5;
+    border-left: 3px solid var(--line);
     background: #ffffff;
     border-radius: 0 14px 14px 0;
     transition: background 0.3s ease;
@@ -218,7 +218,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   .cv-exp__company {
     font-size: 1rem;
     font-weight: 600;
-    color: #222222;
+    color: var(--ink);
     overflow-wrap: break-word;
     word-break: break-word;
     min-width: 0;
@@ -226,13 +226,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .cv-exp__period {
     font-size: 0.8rem;
-    color: #6a6a6a;
+    color: var(--ink-soft);
     flex-shrink: 0;
   }
 
   .cv-exp__role {
     font-size: 0.78rem;
-    color: #ff385c;
+    color: var(--brand-text);
     margin-bottom: 0.5rem;
     overflow-wrap: break-word;
     word-break: break-word;
@@ -240,7 +240,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .cv-exp__desc {
     font-size: 0.8rem;
-    color: #222222;
+    color: var(--ink);
     line-height: 1.65;
     overflow-wrap: break-word;
     word-break: break-word;
@@ -262,12 +262,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   .cv-edu__school {
     font-size: 0.95rem;
     font-weight: 600;
-    color: #222222;
+    color: var(--ink);
   }
 
   .cv-edu__detail {
     font-size: 0.8rem;
-    color: #6a6a6a;
+    color: var(--ink-soft);
     margin-top: 0.25rem;
   }
 
@@ -282,9 +282,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     font-size: 0.72rem;
     padding: 0.3rem 0.75rem;
     border-radius: 2rem;
-    background: #f2f2f2;
-    color: #222222;
-    border: 1px solid #e5e5e5;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line);
   }
 
   @media (max-width: 480px) {

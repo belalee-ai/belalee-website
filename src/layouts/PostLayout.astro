@@ -18,13 +18,13 @@ const { title, description, pubDate, updatedDate, heroImage, badge, tags = [], p
 dayjs.extend(localizedFormat);
 
 const postBadgeColors: Record<string, string> = {
-  "商业化": "#ff385c",
-  "增长": "#ff385c",
-  "出海": "#ff385c",
-  "工作流": "#ff385c",
-  "AI 转型": "#ff385c",
+  "商业化": "var(--brand-grad)",
+  "增长": "var(--brand-grad)",
+  "出海": "var(--brand-grad)",
+  "工作流": "var(--brand-grad)",
+  "AI 转型": "var(--brand-grad)",
 };
-const postBadgeColor = badge ? (postBadgeColors[badge] || "#ff385c") : "";
+const postBadgeColor = badge ? (postBadgeColors[badge] || "var(--brand-grad)") : "";
 const displayDate = dayjs(pubDate).format("ll");
 import { Image } from "astro:assets";
 
@@ -32,6 +32,7 @@ const tag_url = "/blog/tag";
 ---
 
 <BaseLayout title={title} description={description} image={heroImage} ogType="article" enablePageScroll={false}>
+  <div class="post-progress" id="post-progress" aria-hidden="true"></div>
   <div class="md:flex md:justify-center">
     <article class="prose prose-lg max-w-[750px] prose-img:mx-auto post-article">
       {heroImage && <Image width={750} height={422} format="webp" src={heroImage} alt={title} class="w-full mb-6 rounded-xl" />}
@@ -58,18 +59,19 @@ const tag_url = "/blog/tag";
         <p class="post-tldr__text">{description}</p>
       </div>
 
-      <!-- TOC - auto generated from h2 -->
-      <nav class="post-toc" id="post-toc">
-        <div class="post-toc__header">
+      <!-- TOC - auto generated from h2; <details> so mobile can collapse it (desktop opens via JS) -->
+      <details class="post-toc" id="post-toc">
+        <summary class="post-toc__header">
           <span class="post-toc__icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
           </span>
           <span class="post-toc__title">目录</span>
-        </div>
+          <span class="post-toc__chevron" aria-hidden="true">▾</span>
+        </summary>
         <ol class="post-toc__list" id="post-toc-list">
           <!-- JS will populate -->
         </ol>
-      </nav>
+      </details>
 
       {updatedDate && (
         <p class="post-updated">最后更新于 <time>{dayjs(updatedDate).format("ll")}</time></p>
@@ -116,8 +118,9 @@ const tag_url = "/blog/tag";
         startOnLoad: false,
         theme: 'base',
         themeVariables: {
+          // Mermaid 不能用 CSS 变量，色值与 global.css 的 --brand-text (#4d7c0f) 同源
           primaryColor: '#ffffff',
-          primaryBorderColor: '#ff385c',
+          primaryBorderColor: '#4d7c0f',
           primaryTextColor: '#222222',
           lineColor: '#c1c1c1',
           secondaryColor: '#f2f2f2',
@@ -133,6 +136,22 @@ const tag_url = "/blog/tag";
       });
     }
 
+    // 阅读进度条 — 顶部细绿条随滚动增长
+    const progress = document.getElementById('post-progress');
+    if (progress) {
+      const scroller = document.scrollingElement;
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        const max = scroller.scrollHeight - scroller.clientHeight;
+        progress.style.transform = `scaleX(${max > 0 ? Math.min(scroller.scrollTop / max, 1) : 0})`;
+      };
+      window.addEventListener('scroll', () => {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }, { passive: true });
+      update();
+    }
+
     const body = document.getElementById('post-body');
     const tocList = document.getElementById('post-toc-list');
     const toc = document.getElementById('post-toc');
@@ -143,6 +162,9 @@ const tag_url = "/blog/tag";
       toc.style.display = 'none';
       return;
     }
+
+    // 桌面端默认展开目录，手机端默认收起（点「目录」可展开）
+    toc.open = window.matchMedia('(min-width: 768px)').matches;
 
     // Build TOC
     headings.forEach((h, i) => {
@@ -180,6 +202,20 @@ const tag_url = "/blog/tag";
 </script>
 
 <style is:global>
+  /* 阅读进度条 */
+  .post-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--brand-grad);
+    transform: scaleX(0);
+    transform-origin: left center;
+    z-index: 50;
+    pointer-events: none;
+  }
+
   /* Post header */
   .post-header {
     margin-bottom: 1.5rem;
@@ -202,15 +238,15 @@ const tag_url = "/blog/tag";
 
   .post-meta__date {
     font-size: 0.78rem;
-    color: #6a6a6a;
+    color: var(--ink-soft);
   }
 
   .post-meta__badge {
     font-size: 0.65rem;
     padding: 0.2rem 0.6rem;
     border-radius: 2rem;
-    background: #ff385c;
-    color: #fff;
+    background: var(--brand-grad);
+    color: var(--ink-on-brand);
     font-weight: 600;
     letter-spacing: 0.03em;
   }
@@ -223,8 +259,8 @@ const tag_url = "/blog/tag";
 
   .post-tag {
     font-size: 0.7rem !important;
-    color: #ff385c !important;
-    background: rgba(0,0,0,0.02);
+    color: var(--brand-text) !important;
+    background: rgb(var(--brand-bright-rgb) / 0.16);
     padding: 0.15rem 0.5rem;
     border-radius: 1rem;
     text-decoration: none !important;
@@ -237,8 +273,8 @@ const tag_url = "/blog/tag";
 
   /* TL;DR block */
   .post-tldr {
-    background: linear-gradient(135deg, rgba(0,0,0,0.02), rgba(0,0,0,0.02));
-    border-left: 3px solid #e5e5e5;
+    background: linear-gradient(135deg, rgb(var(--brand-bright-rgb) / 0.10), rgb(var(--brand-bright-rgb) / 0.05));
+    border-left: 3px solid var(--brand-bright);
     border-radius: 0 0.75rem 0.75rem 0;
     padding: 1rem 1.25rem;
     margin-bottom: 1.25rem !important;
@@ -251,13 +287,13 @@ const tag_url = "/blog/tag";
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: #ff385c;
+    color: var(--brand-text);
     margin-bottom: 0.3rem;
   }
 
   .post-tldr__text {
     font-size: 0.88rem !important;
-    color: #222222;
+    color: var(--ink);
     line-height: 1.65 !important;
     margin: 0 !important;
   }
@@ -276,18 +312,40 @@ const tag_url = "/blog/tag";
     display: flex;
     align-items: center;
     gap: 0.4rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .post-toc__header::-webkit-details-marker {
+    display: none;
+  }
+
+  .post-toc[open] .post-toc__header {
     margin-bottom: 0.6rem;
   }
 
+  .post-toc__chevron {
+    margin-left: auto;
+    font-size: 0.7rem;
+    color: var(--ink-soft);
+    transition: transform 0.25s ease;
+  }
+
+  .post-toc[open] .post-toc__chevron {
+    transform: rotate(180deg);
+  }
+
   .post-toc__icon {
-    color: #ff385c;
+    color: var(--brand-text);
     display: flex;
   }
 
   .post-toc__title {
     font-size: 0.72rem;
     font-weight: 600;
-    color: #ff385c;
+    color: var(--brand-text);
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
@@ -310,7 +368,7 @@ const tag_url = "/blog/tag";
   .post-toc__link {
     display: block;
     font-size: 0.8rem !important;
-    color: #6a6a6a !important;
+    color: var(--ink-soft) !important;
     text-decoration: none !important;
     padding: 0.3rem 0.6rem;
     border-radius: 0.4rem;
@@ -321,24 +379,24 @@ const tag_url = "/blog/tag";
 
   .post-toc__link::before {
     content: counter(toc) ". ";
-    color: #ff385c;
+    color: var(--brand-text);
     font-weight: 500;
   }
 
   .post-toc__link:hover {
     background: rgba(0,0,0,0.02);
-    color: #222222 !important;
+    color: var(--ink) !important;
   }
 
   .post-toc__link.active {
     background: rgba(0,0,0,0.02);
-    color: #ff385c !important;
+    color: var(--brand-text) !important;
     font-weight: 600;
   }
 
   .post-updated {
     font-size: 0.72rem !important;
-    color: #6a6a6a;
+    color: var(--ink-soft);
     margin-bottom: 1rem !important;
   }
 
@@ -350,26 +408,26 @@ const tag_url = "/blog/tag";
     margin-bottom: 1rem !important;
     padding-bottom: 0.4rem;
     border-bottom: 1.5px solid rgba(0,0,0,0.08);
-    color: #222222;
+    color: var(--ink);
     scroll-margin-top: 2rem;
   }
 
   .post-body h3 {
     font-size: 1.1rem !important;
     font-weight: 600;
-    color: #222222;
+    color: var(--ink);
     margin-top: 1.8rem !important;
   }
 
   .post-body p {
     font-size: 0.92rem !important;
     line-height: 1.85 !important;
-    color: #222222;
+    color: var(--ink);
     margin-bottom: 1.1rem !important;
   }
 
   .post-body strong {
-    color: #222222;
+    color: var(--ink);
     font-weight: 600;
   }
 
@@ -381,16 +439,16 @@ const tag_url = "/blog/tag";
   .post-body li {
     font-size: 0.9rem !important;
     line-height: 1.8 !important;
-    color: #222222;
+    color: var(--ink);
     margin-bottom: 0.35rem !important;
   }
 
   .post-body li::marker {
-    color: #ff385c;
+    color: var(--brand-text);
   }
 
   .post-body blockquote {
-    border-left-color: #ff385c !important;
+    border-left-color: var(--brand-bright) !important;
     background: rgba(0,0,0,0.02);
     border-radius: 0 0.5rem 0.5rem 0;
     padding: 0.75rem 1rem !important;
@@ -398,28 +456,28 @@ const tag_url = "/blog/tag";
   }
 
   .post-body blockquote p {
-    color: #222222 !important;
+    color: var(--ink) !important;
     font-size: 0.88rem !important;
   }
 
   .post-body :not(pre) > code {
     background: rgba(0,0,0,0.02) !important;
-    color: #222222 !important;
+    color: var(--ink) !important;
     padding: 0.15rem 0.4rem !important;
     border-radius: 0.3rem !important;
     font-size: 0.82rem !important;
   }
 
   .post-body a {
-    color: #ff385c !important;
-    text-decoration-color: rgba(255,56,92,0.4) !important;
+    color: var(--brand-text) !important;
+    text-decoration-color: rgb(var(--brand-text-rgb) / 0.4) !important;
     text-underline-offset: 3px;
     transition: color 0.2s ease, text-decoration-color 0.2s ease;
   }
 
   .post-body a:hover {
-    color: #ff385c !important;
-    text-decoration-color: #ff385c !important;
+    color: var(--brand-text) !important;
+    text-decoration-color: var(--brand-text) !important;
   }
 
   .post-body hr {
@@ -431,20 +489,20 @@ const tag_url = "/blog/tag";
   /* Reference section */
   .post-body h2:last-of-type {
     font-size: 1rem !important;
-    color: #6a6a6a;
+    color: var(--ink-soft);
     border-bottom: none;
   }
 
   .post-body h2:last-of-type ~ p {
     font-size: 0.78rem !important;
-    color: #6a6a6a;
+    color: var(--ink-soft);
     line-height: 1.6 !important;
     margin-bottom: 0.4rem !important;
   }
 
   .post-body h2:last-of-type ~ p a {
     font-size: 0.78rem !important;
-    color: #6a6a6a !important;
+    color: var(--ink-soft) !important;
   }
 
   /* Prev / Next navigation */
@@ -479,14 +537,14 @@ const tag_url = "/blog/tag";
 
   .post-nav__label {
     font-size: 0.65rem;
-    color: #ff385c;
+    color: var(--brand-text);
     font-weight: 500;
     letter-spacing: 0.05em;
   }
 
   .post-nav__title {
     font-size: 0.85rem !important;
-    color: #222222 !important;
+    color: var(--ink) !important;
     font-weight: 500;
     line-height: 1.4;
     display: -webkit-box;
@@ -504,13 +562,13 @@ const tag_url = "/blog/tag";
 
   .post-back__link {
     font-size: 0.78rem !important;
-    color: #6a6a6a !important;
+    color: var(--ink-soft) !important;
     text-decoration: none !important;
     transition: color 0.2s ease;
   }
 
   .post-back__link:hover {
-    color: #ff385c !important;
+    color: var(--brand-text) !important;
   }
 
   /* Mermaid diagrams */
@@ -542,7 +600,7 @@ const tag_url = "/blog/tag";
   .design-figure__title {
     font-size: 0.72rem;
     font-weight: 600;
-    color: #ff385c;
+    color: var(--brand-text);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: 1rem;
@@ -556,9 +614,24 @@ const tag_url = "/blog/tag";
     height: auto;
   }
 
-  @media (max-width: 768px) {
-    .post-toc {
-      display: none;
+  /* 代码块 / 表格横向溢出兜底（手机上长代码、宽表格可滑动而不是撑破页面） */
+  .post-body pre {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+
+  .post-body table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* 移动端有 4rem 高的 sticky 顶栏，锚点跳转时多留出空间避免标题被遮住 */
+  @media (max-width: 1023px) {
+    .post-body h2 {
+      scroll-margin-top: 5rem;
     }
   }
 

@@ -1,0 +1,572 @@
+我看这个网站左边的留白过于大了。如果我把中间的内容往左边调一些，可以把这个留白空间减弱吗？
+
+或者你有什么其他建议？<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>配色候选预览 — 渐变浅色系</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #222222;
+    --ink-soft: #6a6a6a;
+    --line: #e5e5e5;
+    --surface-soft: #f2f2f2;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: #f7f7f7;
+    color: var(--ink);
+    font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.01em;
+  }
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+  .page-header {
+    margin-bottom: 32px;
+  }
+  .page-header h1 {
+    font-size: 1.5rem;
+    margin: 0 0 8px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .page-header p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    max-width: 920px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 980px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--bg);
+    border-radius: 20px;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: rgba(0,0,0,0.02) 0 0 0 1px, rgba(0,0,0,0.04) 0 4px 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Big swatch on top — shows the actual gradient */
+  .swatch {
+    height: 130px;
+    position: relative;
+    color: var(--swatch-ink, #fff);
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--grad);
+  }
+  .swatch-name {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .swatch-hex {
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 0.7rem;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+
+  .card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .label {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  /* Hero CTA — uses the gradient. Text color flips dark on light variants */
+  .hero-btn {
+    background: var(--grad);
+    color: var(--ink-on-brand, #fff);
+    border: none;
+    border-radius: 2rem;
+    padding: 0.7rem 1.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: transform 200ms, box-shadow 200ms, filter 200ms;
+    font-family: inherit;
+  }
+  .hero-btn:hover {
+    filter: brightness(0.94) saturate(1.1);
+    box-shadow: 0 4px 14px rgb(from var(--brand-text) r g b / 0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Sidebar active row — uses --brand-text for the readable text color
+     and a tint of --brand-text for the soft background */
+  .sidebar-mock {
+    background: rgb(from var(--brand-text) r g b / 0.10);
+    color: var(--brand-text);
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .sidebar-mock::before {
+    content: "◉";
+    font-size: 0.9rem;
+  }
+
+  /* Card badge — must be solid (border + text), uses --brand-text */
+  .badge-mock {
+    color: var(--brand-text);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border-left: 3px solid var(--brand-text);
+    padding-left: 8px;
+    text-transform: uppercase;
+  }
+
+  /* Lab status pill — gets to use the gradient */
+  .lab-pill {
+    display: inline-block;
+    background: var(--grad);
+    color: var(--ink-on-brand, #fff);
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 0.18rem 0.6rem;
+    border-radius: 1rem;
+    margin-right: 6px;
+  }
+  .lab-pill--soon {
+    background: var(--surface-soft);
+    color: var(--ink-soft);
+  }
+
+  /* Avatar with ring glow — uses gradient at low opacity */
+  .avatar-mock {
+    position: relative;
+    width: 64px;
+    height: 64px;
+  }
+  .avatar-mock .glow {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: var(--grad);
+    opacity: 0.35;
+    filter: blur(0.5px);
+  }
+  .avatar-mock .glow::after {
+    content: '';
+    position: absolute;
+    inset: 2.5px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #ffffff, #f8f8f8);
+  }
+  .avatar-mock .face {
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    background: var(--surface-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--ink-soft);
+  }
+
+  /* Inline link hover preview */
+  .link-mock {
+    color: var(--ink-soft);
+    font-size: 0.875rem;
+    text-decoration: none;
+    border-bottom: 1px dashed transparent;
+  }
+  .link-mock:hover {
+    color: var(--brand-text);
+    border-bottom-color: rgb(from var(--brand-text) r g b / 0.45);
+  }
+
+  /* ============================================================
+     PALETTES — all gradients, all in the pink / warm family
+     --grad         : the actual gradient (used on backgrounds)
+     --brand-text   : darker single color used for text-on-white
+                      (sidebar text, badge text, link hover, badge border)
+     --ink-on-brand : text color on the gradient button.
+                      Light gradients need dark text; dark ones need white.
+     --swatch-ink   : title text color on the big swatch
+     ============================================================ */
+
+  /* 1. Sunset Original — current reference, deepest of the bunch */
+  .card[data-palette="sunset-orig"] {
+    --grad: linear-gradient(135deg, #ff7eb9, #ff8c42);
+    --brand-text: #d6376f;
+    --ink-on-brand: #fff;
+    --swatch-ink: #fff;
+  }
+
+  /* 2. Sunset Lite — ~15% lighter */
+  .card[data-palette="sunset-lite"] {
+    --grad: linear-gradient(135deg, #ffa6ce, #ffae72);
+    --brand-text: #c8537a;
+    --ink-on-brand: #4a1f30;
+    --swatch-ink: #4a1f30;
+  }
+
+  /* 3. Sunset Cloud — much lighter, very pastel */
+  .card[data-palette="sunset-cloud"] {
+    --grad: linear-gradient(135deg, #ffc7df, #ffd0a0);
+    --brand-text: #b85775;
+    --ink-on-brand: #5a2538;
+    --swatch-ink: #5a2538;
+  }
+
+  /* 4. Peach Cream — lightest, almost cream */
+  .card[data-palette="peach-cream"] {
+    --grad: linear-gradient(135deg, #ffdce5, #ffe2c0);
+    --brand-text: #b25d6a;
+    --ink-on-brand: #5a2530;
+    --swatch-ink: #5a2530;
+  }
+
+  /* 5. Blush Mono — monochromatic pink gradient (no orange) */
+  .card[data-palette="blush-mono"] {
+    --grad: linear-gradient(135deg, #ffc8d4, #ff96ad);
+    --brand-text: #d04866;
+    --ink-on-brand: #4a1822;
+    --swatch-ink: #4a1822;
+  }
+
+  /* 6. Rose Lavender — pink to lavender, dreamy direction */
+  .card[data-palette="rose-lavender"] {
+    --grad: linear-gradient(135deg, #ffbcd6, #cbb8ff);
+    --brand-text: #a558aa;
+    --ink-on-brand: #3d1f4d;
+    --swatch-ink: #3d1f4d;
+  }
+
+  /* Footer note */
+  .note {
+    margin-top: 32px;
+    padding: 16px 20px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .note strong { color: var(--ink); }
+  .note code {
+    background: var(--surface-soft);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 0.7rem;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="page-header">
+    <h1>配色候选 · 渐变浅色系</h1>
+    <p>第一排：Sunset 原色 → Sunset Lite → Sunset Cloud（同一渐变方向，从原始 → 浅一档 → 浅两档）。第二排：Peach Cream（最浅，奶油级）· Blush Mono（单粉色渐变，没有橙）· Rose Lavender（粉紫梦幻向）。所有 6 张都是渐变方案——hero 按钮、lab 标签、头像光晕都用渐变，必须用纯色的地方（sidebar 文字、card badge、链接 hover）退回到与渐变同色系的深一档单色，确保白底可读。<br><br>注意第 2-6 张的 hero 按钮文字是<strong>深色</strong>而不是白色——这是浅色渐变的硬约束：白字在浅粉上读不清，必须翻成深字。这会让按钮气质从"自信强调"变成"温柔副 CTA"，是个真实的取舍。把鼠标悬停到按钮和链接上看 hover 态。</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- 1. Sunset Original (reference) -->
+    <article class="card" data-palette="sunset-orig">
+      <div class="swatch">
+        <div>
+          <div class="swatch-name">Sunset 原色</div>
+          <div class="swatch-hex">#ff7eb9 → #ff8c42</div>
+        </div>
+        <div class="swatch-hex">deep · #d6376f / 白字按钮</div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="label">Hero CTA (白字)</div>
+          <button class="hero-btn">了解更多 →</button>
+        </div>
+        <div>
+          <div class="label">Sidebar active</div>
+          <div class="sidebar-mock">关于我</div>
+        </div>
+        <div>
+          <div class="label">Card badge / divider</div>
+          <div class="badge-mock">商业化</div>
+        </div>
+        <div>
+          <div class="label">Lab status pills</div>
+          <div>
+            <span class="lab-pill">LIVE</span>
+            <span class="lab-pill lab-pill--soon">即将上线</span>
+          </div>
+        </div>
+        <div>
+          <div class="label">Avatar ring glow</div>
+          <div class="avatar-mock">
+            <div class="glow"></div>
+            <div class="face">👤</div>
+          </div>
+        </div>
+        <div>
+          <div class="label">Inline link (hover)</div>
+          <a href="#" class="link-mock">把鼠标移到这条链接上 →</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2. Sunset Lite -->
+    <article class="card" data-palette="sunset-lite">
+      <div class="swatch">
+        <div>
+          <div class="swatch-name">Sunset Lite</div>
+          <div class="swatch-hex">#ffa6ce → #ffae72</div>
+        </div>
+        <div class="swatch-hex">deep · #c8537a / 深字按钮</div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="label">Hero CTA (深字)</div>
+          <button class="hero-btn">了解更多 →</button>
+        </div>
+        <div>
+          <div class="label">Sidebar active</div>
+          <div class="sidebar-mock">关于我</div>
+        </div>
+        <div>
+          <div class="label">Card badge / divider</div>
+          <div class="badge-mock">商业化</div>
+        </div>
+        <div>
+          <div class="label">Lab status pills</div>
+          <div>
+            <span class="lab-pill">LIVE</span>
+            <span class="lab-pill lab-pill--soon">即将上线</span>
+          </div>
+        </div>
+        <div>
+          <div class="label">Avatar ring glow</div>
+          <div class="avatar-mock">
+            <div class="glow"></div>
+            <div class="face">👤</div>
+          </div>
+        </div>
+        <div>
+          <div class="label">Inline link (hover)</div>
+          <a href="#" class="link-mock">把鼠标移到这条链接上 →</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 3. Sunset Cloud -->
+    <article class="card" data-palette="sunset-cloud">
+      <div class="swatch">
+        <div>
+          <div class="swatch-name">Sunset Cloud</div>
+          <div class="swatch-hex">#ffc7df → #ffd0a0</div>
+        </div>
+        <div class="swatch-hex">deep · #b85775 / 深字按钮</div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="label">Hero CTA (深字)</div>
+          <button class="hero-btn">了解更多 →</button>
+        </div>
+        <div>
+          <div class="label">Sidebar active</div>
+          <div class="sidebar-mock">关于我</div>
+        </div>
+        <div>
+          <div class="label">Card badge / divider</div>
+          <div class="badge-mock">商业化</div>
+        </div>
+        <div>
+          <div class="label">Lab status pills</div>
+          <div>
+            <span class="lab-pill">LIVE</span>
+            <span class="lab-pill lab-pill--soon">即将上线</span>
+          </div>
+        </div>
+        <div>
+          <div class="label">Avatar ring glow</div>
+          <div class="avatar-mock">
+            <div class="glow"></div>
+            <div class="face">👤</div>
+          </div>
+        </div>
+        <div>
+          <div class="label">Inline link (hover)</div>
+          <a href="#" class="link-mock">把鼠标移到这条链接上 →</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 4. Peach Cream -->
+    <article class="card" data-palette="peach-cream">
+      <div class="swatch">
+        <div>
+          <div class="swatch-name">Peach Cream</div>
+          <div class="swatch-hex">#ffdce5 → #ffe2c0</div>
+        </div>
+        <div class="swatch-hex">deep · #b25d6a / 深字按钮</div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="label">Hero CTA (深字)</div>
+          <button class="hero-btn">了解更多 →</button>
+        </div>
+        <div>
+          <div class="label">Sidebar active</div>
+          <div class="sidebar-mock">关于我</div>
+        </div>
+        <div>
+          <div class="label">Card badge / divider</div>
+          <div class="badge-mock">商业化</div>
+        </div>
+        <div>
+          <div class="label">Lab status pills</div>
+          <div>
+            <span class="lab-pill">LIVE</span>
+            <span class="lab-pill lab-pill--soon">即将上线</span>
+          </div>
+        </div>
+        <div>
+          <div class="label">Avatar ring glow</div>
+          <div class="avatar-mock">
+            <div class="glow"></div>
+            <div class="face">👤</div>
+          </div>
+        </div>
+        <div>
+          <div class="label">Inline link (hover)</div>
+          <a href="#" class="link-mock">把鼠标移到这条链接上 →</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 5. Blush Mono -->
+    <article class="card" data-palette="blush-mono">
+      <div class="swatch">
+        <div>
+          <div class="swatch-name">Blush Mono 单粉</div>
+          <div class="swatch-hex">#ffc8d4 → #ff96ad</div>
+        </div>
+        <div class="swatch-hex">deep · #d04866 / 深字按钮</div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="label">Hero CTA (深字)</div>
+          <button class="hero-btn">了解更多 →</button>
+        </div>
+        <div>
+          <div class="label">Sidebar active</div>
+          <div class="sidebar-mock">关于我</div>
+        </div>
+        <div>
+          <div class="label">Card badge / divider</div>
+          <div class="badge-mock">商业化</div>
+        </div>
+        <div>
+          <div class="label">Lab status pills</div>
+          <div>
+            <span class="lab-pill">LIVE</span>
+            <span class="lab-pill lab-pill--soon">即将上线</span>
+          </div>
+        </div>
+        <div>
+          <div class="label">Avatar ring glow</div>
+          <div class="avatar-mock">
+            <div class="glow"></div>
+            <div class="face">👤</div>
+          </div>
+        </div>
+        <div>
+          <div class="label">Inline link (hover)</div>
+          <a href="#" class="link-mock">把鼠标移到这条链接上 →</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 6. Rose Lavender -->
+    <article class="card" data-palette="rose-lavender">
+      <div class="swatch">
+        <div>
+          <div class="swatch-name">Rose Lavender 粉紫</div>
+          <div class="swatch-hex">#ffbcd6 → #cbb8ff</div>
+        </div>
+        <div class="swatch-hex">deep · #a558aa / 深字按钮</div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="label">Hero CTA (深字)</div>
+          <button class="hero-btn">了解更多 →</button>
+        </div>
+        <div>
+          <div class="label">Sidebar active</div>
+          <div class="sidebar-mock">关于我</div>
+        </div>
+        <div>
+          <div class="label">Card badge / divider</div>
+          <div class="badge-mock">商业化</div>
+        </div>
+        <div>
+          <div class="label">Lab status pills</div>
+          <div>
+            <span class="lab-pill">LIVE</span>
+            <span class="lab-pill lab-pill--soon">即将上线</span>
+          </div>
+        </div>
+        <div>
+          <div class="label">Avatar ring glow</div>
+          <div class="avatar-mock">
+            <div class="glow"></div>
+            <div class="face">👤</div>
+          </div>
+        </div>
+        <div>
+          <div class="label">Inline link (hover)</div>
+          <a href="#" class="link-mock">把鼠标移到这条链接上 →</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="note">
+    <strong>怎么对比：</strong>第一排是 Sunset 同方向的 3 档浅度，主要看 hero 按钮可读性、sidebar 文字色对比度、整体氛围温度。第二排是不同色相方向 —— Peach Cream 是奶油暖白家族，Blush Mono 去掉了橙色只留单粉，Rose Lavender 把橙换成淡紫制造梦幻感。<br><br>
+    <strong>每张卡有两个可视的"色"</strong>：（1）大色块上的渐变 = 真实的渐变方案，用在按钮/标签/光晕。（2）卡片下方文字的颜色 = 派生出来的"text 色"，用在所有必须用纯色的地方（sidebar 文字、badge 文字、链接 hover）。这两个色必须搭配——光看渐变好看不够，还要看 text 色在白底上是否够清楚。<br><br>
+    <strong>关键取舍：</strong>渐变越浅，hero 按钮文字必须越深。Sunset 原色还能用白字，从 Sunset Lite 开始全部翻成深字。Peach Cream 是极限——再浅一档按钮就基本看不出"按钮"形状了。<br><br>
+    <strong>下一步：</strong>挑一张告诉我（直接说名字就行），或者说"X 这张再粉一点 / 再暖一点 / 把橙换成 Y"，我接着改。挑定再动正式代码。
+  </div>
+</div>
+</body>
+</html>

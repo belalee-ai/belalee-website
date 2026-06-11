@@ -19,18 +19,22 @@ const posts = (await getCollection("blog")).sort((a, b) => {
   return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
 });
 
-const badgeAccents: Record<string, { color: string; bg: string }> = {
-  "商业化": { color: "#222222", bg: "rgba(0,0,0,0.04)" },
-  "增长": { color: "#222222", bg: "rgba(0,0,0,0.04)" },
-  "出海": { color: "#222222", bg: "rgba(0,0,0,0.04)" },
-  "工作流": { color: "#222222", bg: "rgba(0,0,0,0.04)" },
-  "AI 转型": { color: "#222222", bg: "rgba(0,0,0,0.04)" },
-};
 ---
 
 <BaseLayout sideBarActiveItemID="home">
   <div class="pb-12 mt-5">
     <div class="text-center hero-gradient">
+      <!-- 柠檬气泡点缀（纯装饰，屏幕阅读器跳过）
+           三层结构：外层吃鼠标视差，中层横向漂移，内层纵向浮动+呼吸 -->
+      <div class="hero-deco" aria-hidden="true">
+        <span class="hero-orb hero-orb--1"><b><i></i></b></span>
+        <span class="hero-orb hero-orb--2"><b><i></i></b></span>
+        <span class="hero-orb hero-orb--3"><b><i></i></b></span>
+        <span class="hero-orb hero-orb--4"><b><i></i></b></span>
+        <span class="hero-orb hero-orb--5"><b><i></i></b></span>
+        <span class="hero-deco__cross"><b>+</b></span>
+        <span class="hero-deco__pear"><b>🍐</b></span>
+      </div>
       <div class="avatar mb-6">
         <div class="w-20 rounded-full ring-2 ring-accent/30 ring-offset-base-100 ring-offset-2 mx-auto">
           <img src="/profile.jpg" alt="梨贝拉" />
@@ -38,11 +42,11 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
       </div>
       <h1 class="text-4xl font-bold tracking-wide"><span class="inline-block">🍐</span>梨贝拉</h1>
       <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mt-6 text-lg tracking-widest">
-        <span style="color: #222222;">效果广告</span>
+        <span style="color: var(--ink);">效果广告</span>
         <span class="text-base-content/20">｜</span>
-        <span style="color: #222222;">订阅商业化</span>
+        <span style="color: var(--ink);">订阅商业化</span>
         <span class="text-base-content/20">｜</span>
-        <span style="color: #222222;">出海增长</span>
+        <span style="color: var(--ink);">出海增长</span>
       </div>
       <p class="text-base mt-7 text-base-content/60 leading-relaxed max-w-xl mx-auto">
         6年+ C端增长与商业化实战，前拼多多/TEMU · 美图秀秀 · 瑞幸咖啡<br/>
@@ -51,6 +55,26 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
       <div class="flex gap-4 justify-center mt-10">
         <a href="/contact" class="btn btn-sm gap-1 hero-btn hero-btn-primary">联系我 <span class="text-xs">→</span></a>
         <a href="/cv" class="btn btn-sm btn-ghost gap-1 hero-btn">查看简历 <span class="text-xs">→</span></a>
+      </div>
+    </div>
+
+    <!-- 数据大字报 — 瑞士风成就数字区 -->
+    <div class="home-stats" aria-label="核心成绩">
+      <div class="home-stat">
+        <span class="home-stat__num" data-count="6" data-suffix="年+">6年+</span>
+        <span class="home-stat__label">C端增长实战</span>
+      </div>
+      <div class="home-stat">
+        <span class="home-stat__num" data-count="40" data-prefix="+" data-suffix="%">+40%</span>
+        <span class="home-stat__label">订阅付费收入提升</span>
+      </div>
+      <div class="home-stat">
+        <span class="home-stat__num" data-count="10" data-prefix="$" data-suffix="K+">$10K+</span>
+        <span class="home-stat__label">单条广告日花费</span>
+      </div>
+      <div class="home-stat">
+        <span class="home-stat__num" data-count="100" data-suffix="%+">100%+</span>
+        <span class="home-stat__label">ROAS 稳定回报</span>
       </div>
     </div>
   </div>
@@ -66,7 +90,7 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
         {posts.map((post, i) => (
           <a href={"/blog/" + createSlug(post.data.title, post.slug)} class="home-insight-item">
             <span class="home-insight-num">{String(i + 1).padStart(2, '0')}</span>
-            <span class="home-insight-badge" style={`color: ${badgeAccents[post.data.badge || ""]?.color || ""}; background: ${badgeAccents[post.data.badge || ""]?.bg || ""};`}>{post.data.badge}</span>
+            <span class="home-insight-badge">{post.data.badge}</span>
             <span class="home-insight-title">{post.data.title}</span>
             <span class="home-insight-arrow">→</span>
           </a>
@@ -244,6 +268,31 @@ const badgeAccents: Record<string, { color: string; bg: string }> = {
           }
         }, { passive: true });
       }
+    });
+  </script>
+
+  <script is:inline>
+    // Hero 气泡鼠标视差 — 仅桌面指针设备，移出平滑回位
+    document.addEventListener('astro:page-load', function() {
+      var hero = document.querySelector('.hero-gradient');
+      var deco = document.querySelector('.hero-deco');
+      if (!hero || !deco) return;
+      if (!window.matchMedia('(hover: hover)').matches) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      hero.addEventListener('pointermove', function(e) {
+        var r = hero.getBoundingClientRect();
+        // 鼠标相对 hero 中心的偏移，归一化后放大成 px 基准量
+        var mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+        var my = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        deco.style.setProperty('--mx', (mx * 160).toFixed(1) + 'px');
+        deco.style.setProperty('--my', (my * 110).toFixed(1) + 'px');
+      }, { passive: true });
+
+      hero.addEventListener('pointerleave', function() {
+        deco.style.setProperty('--mx', '0px');
+        deco.style.setProperty('--my', '0px');
+      }, { passive: true });
     });
   </script>
 </BaseLayout>

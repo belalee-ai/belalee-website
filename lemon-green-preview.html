@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>配色候选预览 — 柠檬绿系</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #222222;
+    --ink-soft: #6a6a6a;
+    --line: #e5e5e5;
+    --surface-soft: #f2f2f2;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: #f7f7f7;
+    color: var(--ink);
+    font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.01em;
+  }
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+  .page-header {
+    margin-bottom: 32px;
+  }
+  .page-header h1 {
+    font-size: 1.5rem;
+    margin: 0 0 8px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .page-header p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    max-width: 920px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 980px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--bg);
+    border-radius: 20px;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: rgba(0,0,0,0.02) 0 0 0 1px, rgba(0,0,0,0.04) 0 4px 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Big swatch on top — shows the actual gradient */
+  .swatch {
+    height: 130px;
+    position: relative;
+    color: var(--swatch-ink, #fff);
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--grad);
+  }
+  .swatch-name {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .swatch-hex {
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 0.7rem;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+
+  .card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .label {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  /* Hero CTA — uses the gradient */
+  .hero-btn {
+    background: var(--grad);
+    color: var(--ink-on-brand, #fff);
+    border: none;
+    border-radius: 2rem;
+    padding: 0.7rem 1.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: transform 200ms, box-shadow 200ms, filter 200ms;
+    font-family: inherit;
+  }
+  .hero-btn:hover {
+    filter: brightness(0.94) saturate(1.1);
+    box-shadow: 0 4px 14px rgb(from var(--brand-text) r g b / 0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Hero card background — soft tint used behind home hero */
+  .hero-card-mock {
+    background: var(--brand-card);
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-size: 0.8rem;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .hero-card-mock strong { color: var(--brand-text); }
+
+  /* Sidebar active row */
+  .sidebar-mock {
+    background: rgb(from var(--brand-text) r g b / 0.10);
+    color: var(--brand-text);
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .sidebar-mock::before {
+    content: "◉";
+    font-size: 0.9rem;
+  }
+
+  /* Card badge — solid text + border, uses --brand-text */
+  .badge-mock {
+    color: var(--brand-text);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border-left: 3px solid var(--brand-text);
+    padding-left: 8px;
+    text-transform: uppercase;
+  }
+
+  /* Lab status pill — gradient */
+  .lab-pill {
+    display: inline-block;
+    background: var(--grad);
+    color: var(--ink-on-brand, #fff);
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 0.18rem 0.6rem;
+    border-radius: 1rem;
+    margin-right: 6px;
+  }
+  .lab-pill--soon {
+    background: var(--surface-soft);
+    color: var(--ink-soft);
+  }
+
+  /* Avatar ring glow */
+  .avatar-mock {
+    position: relative;
+    width: 64px;
+    height: 64px;
+  }
+  .avatar-mock .glow {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: var(--grad);
+    opacity: 0.35;
+    filter: blur(0.5px);
+  }
+  .avatar-mock .glow::after {
+    content: '';
+    position: absolute;
+    inset: 2.5px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #ffffff, #f8f8f8);
+  }
+  .avatar-mock .face {
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    background: var(--surface-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--ink-soft);
+  }
+
+  /* Inline link hover */
+  .link-mock {
+    color: var(--ink-soft);
+    font-size: 0.875rem;
+    text-decoration: none;
+    border-bottom: 1px dashed transparent;
+  }
+  .link-mock:hover {
+    color: var(--brand-text);
+    border-bottom-color: rgb(from var(--brand-text) r g b / 0.45);
+  }
+
+  /* Blog 正文链接 + blockquote 样例 — 长文阅读场景的可读性 */
+  .prose-mock {
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: var(--ink);
+  }
+  .prose-mock a {
+    color: var(--brand-text);
+    text-decoration: underline;
+    text-decoration-color: rgb(from var(--brand-text) r g b / 0.4);
+    text-underline-offset: 2px;
+  }
+  .prose-mock blockquote {
+    margin: 8px 0 0;
+    padding: 4px 12px;
+    border-left: 3px solid var(--brand-text);
+    color: var(--ink-soft);
+  }
+
+  /* ============================================================
+     PALETTES — 柠檬绿家族 3 档
+     --grad         : 渐变（按钮 / 标签 / 光晕背景）
+     --brand-text   : 白底上的纯色文字 / 边框 / 链接（必须 WCAG AA）
+     --brand-deep   : hover 加深态
+     --ink-on-brand : 渐变上面的文字色
+     --brand-card   : 极浅卡片底色（hero 区）
+     --swatch-ink   : 大色块上的标题色
+     ============================================================ */
+
+  /* A. 柠檬黄绿 Lemon Zest — 最贴近封面大字的黄绿，鲜亮 */
+  .card[data-palette="lemon-zest"] {
+    --grad: linear-gradient(135deg, #d4f23f, #8fd14f);
+    --brand-text: #4d7c0f;
+    --brand-deep: #3f6212;
+    --ink-on-brand: #2b3d0f;
+    --brand-card: linear-gradient(135deg, #f7fce0, #ecf7dd);
+    --swatch-ink: #2b3d0f;
+  }
+
+  /* B. 嫩草翠绿 Fresh Grass — 偏翠不偏黄，更沉稳一点 */
+  .card[data-palette="fresh-grass"] {
+    --grad: linear-gradient(135deg, #a8e063, #56ab2f);
+    --brand-text: #2e7d32;
+    --brand-deep: #1b5e20;
+    --ink-on-brand: #173d12;
+    --brand-card: linear-gradient(135deg, #eef9e3, #e1f3d8);
+    --swatch-ink: #173d12;
+  }
+
+  /* C. 深绿点睛 Deep Pine — 渐变本身就深，按钮可用白字 */
+  .card[data-palette="deep-pine"] {
+    --grad: linear-gradient(135deg, #43a047, #2e7d32);
+    --brand-text: #2e7d32;
+    --brand-deep: #1b5e20;
+    --ink-on-brand: #ffffff;
+    --brand-card: linear-gradient(135deg, #eaf6eb, #def0e0);
+    --swatch-ink: #ffffff;
+  }
+
+  .note {
+    margin-top: 32px;
+    padding: 16px 20px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .note strong { color: var(--ink); }
+  .note code {
+    background: var(--surface-soft);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 0.7rem;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="page-header">
+    <h1>配色候选 · 柠檬绿系</h1>
+    <p>三套候选都遵循「白底 + 绿色点缀」策略：白底干净不变，绿只出现在按钮、徽章、链接、高亮、hero 浅底上。区别在「亮度档位」——<strong>A 柠檬黄绿</strong>最贴近你封面大字的那种鲜黄绿，最跳；<strong>B 嫩草翠绿</strong>去掉黄味、偏翠，鲜但更稳；<strong>C 深绿点睛</strong>渐变本身就压深了，按钮可以用白字，整体最克制。三套的文字绿都在白底上达到 WCAG AA（≥4.5:1），长文阅读不吃力。把鼠标悬停到按钮和链接上看 hover 态。</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- A. Lemon Zest -->
+    <article class="card" data-palette="lemon-zest">
+      <div class="swatch">
+        <div>
+          <div class="swatch-name">A · 柠檬黄绿 Lemon Zest</div>
+          <div class="swatch-hex">#d4f23f → #8fd14f</div>
+        </div>
+        <div class="swatch-hex">text · #4d7c0f / 深字按钮</div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="label">Hero CTA (深字)</div>
+          <button class="hero-btn">了解更多 →</button>
+        </div>
+        <div>
+          <div class="label">Hero 浅底卡片</div>
+          <div class="hero-card-mock">你好，我是<strong>梨贝拉</strong>🍐 在这里记录 AI 学习和实战。</div>
+        </div>
+        <div>
+          <div class="label">Sidebar active</div>
+          <div class="sidebar-mock">关于我</div>
+        </div>
+        <div>
+          <div class="label">Card badge / divider</div>
+          <div class="badge-mock">商业化</div>
+        </div>
+        <div>
+          <div class="label">Lab status pills</div>
+          <div>
+            <span class="lab-pill">LIVE</span>
+            <span class="lab-pill lab-pill--soon">即将上线</span>
+          </div>
+        </div>
+        <div>
+          <div class="label">Avatar ring glow</div>
+          <div class="avatar-mock">
+            <div class="glow"></div>
+            <div class="face">👤</div>
+          </div>
+        </div>
+        <div>
+          <div class="label">博客正文 链接 + 引用</div>
+          <div class="prose-mock">
+            正文里的<a href="#">这条链接</a>是这套的文字绿。
+            <blockquote>引用块的左边框也是同一个绿。</blockquote>
+          </div>
+        </div>
+        <div>
+          <div class="label">Inline link (hover)</div>
+          <a href="#" class="link-mock">把鼠标移到这条链接上 →</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- B. Fresh Grass -->
+    <article class="card" data-palette="fresh-grass">
+      <div class="swatch">
+        <div>
+          <div class="swatch-name">B · 嫩草翠绿 Fresh Grass</div>
+          <div class="swatch-hex">#a8e063 → #56ab2f</div>
+        </div>
+        <div class="swatch-hex">text · #2e7d32 / 深字按钮</div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="label">Hero CTA (深字)</div>
+          <button class="hero-btn">了解更多 →</button>
+        </div>
+        <div>
+          <div class="label">Hero 浅底卡片</div>
+          <div class="hero-card-mock">你好，我是<strong>梨贝拉</strong>🍐 在这里记录 AI 学习和实战。</div>
+        </div>
+        <div>
+          <div class="label">Sidebar active</div>
+          <div class="sidebar-mock">关于我</div>
+        </div>
+        <div>
+          <div class="label">Card badge / divider</div>
+          <div class="badge-mock">商业化</div>
+        </div>
+        <div>
+          <div class="label">Lab status pills</div>
+          <div>
+            <span class="lab-pill">LIVE</span>
+            <span class="lab-pill lab-pill--soon">即将上线</span>
+          </div>
+        </div>
+        <div>
+          <div class="label">Avatar ring glow</div>
+          <div class="avatar-mock">
+            <div class="glow"></div>
+            <div class="face">👤</div>
+          </div>
+        </div>
+        <div>
+          <div class="label">博客正文 链接 + 引用</div>
+          <div class="prose-mock">
+            正文里的<a href="#">这条链接</a>是这套的文字绿。
+            <blockquote>引用块的左边框也是同一个绿。</blockquote>
+          </div>
+        </div>
+        <div>
+          <div class="label">Inline link (hover)</div>
+          <a href="#" class="link-mock">把鼠标移到这条链接上 →</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- C. Deep Pine -->
+    <article class="card" data-palette="deep-pine">
+      <div class="swatch">
+        <div>
+          <div class="swatch-name">C · 深绿点睛 Deep Pine</div>
+          <div class="swatch-hex">#43a047 → #2e7d32</div>
+        </div>
+        <div class="swatch-hex">text · #2e7d32 / 白字按钮</div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="label">Hero CTA (白字)</div>
+          <button class="hero-btn">了解更多 →</button>
+        </div>
+        <div>
+          <div class="label">Hero 浅底卡片</div>
+          <div class="hero-card-mock">你好，我是<strong>梨贝拉</strong>🍐 在这里记录 AI 学习和实战。</div>
+        </div>
+        <div>
+          <div class="label">Sidebar active</div>
+          <div class="sidebar-mock">关于我</div>
+        </div>
+        <div>
+          <div class="label">Card badge / divider</div>
+          <div class="badge-mock">商业化</div>
+        </div>
+        <div>
+          <div class="label">Lab status pills</div>
+          <div>
+            <span class="lab-pill">LIVE</span>
+            <span class="lab-pill lab-pill--soon">即将上线</span>
+          </div>
+        </div>
+        <div>
+          <div class="label">Avatar ring glow</div>
+          <div class="avatar-mock">
+            <div class="glow"></div>
+            <div class="face">👤</div>
+          </div>
+        </div>
+        <div>
+          <div class="label">博客正文 链接 + 引用</div>
+          <div class="prose-mock">
+            正文里的<a href="#">这条链接</a>是这套的文字绿。
+            <blockquote>引用块的左边框也是同一个绿。</blockquote>
+          </div>
+        </div>
+        <div>
+          <div class="label">Inline link (hover)</div>
+          <a href="#" class="link-mock">把鼠标移到这条链接上 →</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="note">
+    <strong>怎么对比：</strong>三套从左到右是「鲜亮 → 适中 → 克制」。重点看三个地方：（1）hero 按钮——A/B 浅渐变必须配深字，C 深渐变可以用白字，按钮气质会从"清新活泼"变成"沉稳自信"；（2）博客正文里的链接绿——这是你每天看得最多的地方，哪个读起来最舒服选哪个；（3）hero 浅底卡片——首页第一屏的大面积底色，A 最黄、B 偏翠、C 最淡。<br><br>
+    <strong>和封面的关系：</strong>A 的渐变取自你封面大字的黄绿高光，和小红书视觉最统一；B 是封面背景里偏翠的那一层绿；C 用的是封面勾选框那种深绿。三套都是"封面里有的绿"，只是取了不同的层。<br><br>
+    <strong>每张卡有两个关键色：</strong>大色块的渐变（用在按钮/标签/光晕）+ 卡片下方文字的纯色绿（用在 sidebar 文字、badge、链接、引用边框）。两个要一起看——渐变好看不够，文字绿在白底上读着舒服才算过关。<br><br>
+    <strong>下一步：</strong>直接说 A / B / C，或者说"A 再翠一点""C 的按钮想用浅绿渐变"，我接着调。挑定之后我才动正式代码，全站铺开。
+  </div>
+</div>
+</body>
+</html>

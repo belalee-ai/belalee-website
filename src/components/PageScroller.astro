@@ -17,35 +17,138 @@ const prevPage = currentIndex > 0 ? pages[currentIndex - 1] : null;
 const nextPage = currentIndex < pages.length - 1 ? pages[currentIndex + 1] : null;
 ---
 
-{/* Next page hint at bottom */}
+{/* Next page hint at bottom — 也是滑动翻页的目标链接 */}
 {nextPage && (
-  <a href={nextPage.path} class="page-scroll-hint page-scroll-hint--next">
+  <a href={nextPage.path} class="page-scroll-hint page-scroll-hint--next" id="edge-next">
     <span class="page-scroll-hint__arrow">↓</span>
-    <span class="page-scroll-hint__label">继续浏览</span>
+    <span class="page-scroll-hint__label">继续下滑 · 下一页</span>
+    <span class="page-scroll-hint__progress"><span class="page-scroll-hint__progress-fill" id="edge-next-fill"></span></span>
   </a>
 )}
 
-<script define:vars={{ nextPath: nextPage?.path || '' }}>
+{/* Prev page pill at top — 页面在顶部继续下拉时浮现 */}
+{prevPage && (
+  <a href={prevPage.path} class="page-edge-pill" id="edge-prev" tabindex="-1" aria-hidden="true">
+    <span class="page-edge-pill__arrow">↑</span>
+    <span>继续下拉 · 返回上一页</span>
+    <span class="page-edge-pill__progress"><span class="page-edge-pill__progress-fill" id="edge-prev-fill"></span></span>
+  </a>
+)}
+
+<script define:vars={{ nextPath: nextPage?.path || '', prevPath: prevPage?.path || '' }}>
   document.addEventListener('astro:page-load', () => {
-    if (!nextPath) return;
+    /* ── 底部提示进入视野时淡入（原有行为） ── */
+    const nextEl = document.getElementById('edge-next');
+    if (nextEl) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          nextEl.classList.toggle('visible', entry.isIntersecting);
+        });
+      }, { threshold: 0.3 });
+      setTimeout(() => observer.observe(nextEl), 800);
+    }
 
-    // Reveal hint when it scrolls into view (visual nicety only)
-    const trigger = document.querySelector('.page-scroll-hint--next');
-    if (!trigger) return;
+    /* ── 边缘滑动翻页 ──
+       防误触设计：
+       1. 换页落地后 900ms 冷却，惯性滚动不会连跳
+       2. 到达页面边缘后需停顿 350ms，本次手势的惯性余量不计入
+       3. 在边缘继续滑动需"充能"满阈值才跳转，停手 700ms 清零
+       4. 进度条实时可视化充能进度，用户始终有预期 */
+    const prevEl = document.getElementById('edge-prev');
+    if (!nextPath && !prevPath) return;
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          trigger.classList.add('visible');
-        } else {
-          trigger.classList.remove('visible');
-        }
-      });
-    }, { threshold: 0.3 });
+    const scroller = document.scrollingElement;
+    const WHEEL_THRESHOLD = 420;   // 滚轮累计 deltaY
+    const TOUCH_THRESHOLD = 150;   // 手指继续拉动的距离 px
+    const TOUCH_SLACK = 30;        // 触摸起步缓冲，小幅误碰不计
+    const ARM_DELAY = 350;         // 到边后的惯性免疫期 ms
+    const IDLE_RESET = 700;        // 停手清零 ms
+    let readyAt = performance.now() + 900;
+    let navigating = false;
 
-    setTimeout(() => {
-      observer.observe(trigger);
-    }, 800);
+    const atBottom = () => scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 2;
+    const atTop = () => scroller.scrollTop <= 2;
+
+    const fills = {
+      down: document.getElementById('edge-next-fill'),
+      up: document.getElementById('edge-prev-fill'),
+    };
+
+    const render = (dir, progress) => {
+      const fill = fills[dir];
+      if (fill) fill.style.transform = `scaleX(${Math.min(progress, 1)})`;
+      if (dir === 'up' && prevEl) prevEl.classList.toggle('page-edge-pill--visible', progress > 0.02);
+      if (dir === 'down' && nextEl && progress > 0.02) nextEl.classList.add('visible');
+    };
+
+    const states = { down: { armed: false, armAt: 0, acc: 0, last: 0 }, up: { armed: false, armAt: 0, acc: 0, last: 0 } };
+    const reset = (dir) => {
+      const st = states[dir];
+      st.armed = false; st.acc = 0;
+      render(dir, 0);
+    };
+
+    const go = (dir) => {
+      if (navigating) return;
+      navigating = true;
+      const target = dir === 'down' ? nextEl : prevEl;
+      render(dir, 1);
+      // 微小延迟让进度条充满的状态被看见，再走 Astro 路由
+      setTimeout(() => target?.click(), 120);
+    };
+
+    const handleEdge = (dir, amount) => {
+      const now = performance.now();
+      if (now < readyAt || navigating) return;
+      const st = states[dir];
+      if (!st.armed) {
+        st.armed = true;
+        st.armAt = now + ARM_DELAY;
+        st.acc = 0;
+        return;
+      }
+      if (now < st.armAt) return;            // 惯性免疫期
+      if (now - st.last > IDLE_RESET) st.acc = 0; // 停手清零
+      st.last = now;
+      st.acc += amount;
+      render(dir, st.acc / WHEEL_THRESHOLD);
+      if (st.acc >= WHEEL_THRESHOLD) go(dir);
+    };
+
+    /* 滚轮 / 触控板 */
+    window.addEventListener('wheel', (e) => {
+      if (e.deltaY > 0 && nextPath && atBottom()) handleEdge('down', e.deltaY);
+      else if (e.deltaY < 0 && prevPath && atTop()) handleEdge('up', -e.deltaY);
+      else { if (!atBottom()) reset('down'); if (!atTop()) reset('up'); }
+    }, { passive: true });
+
+    /* 触摸：到边后继续拉动的距离作为充能 */
+    let touchY = null;
+    let touchEdge = null; // 手势开始时是否已在边缘（防止一次长划直接触发）
+    window.addEventListener('touchstart', (e) => {
+      touchY = e.touches[0].clientY;
+      touchEdge = { bottom: atBottom(), top: atTop() };
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (touchY === null || navigating) return;
+      if (performance.now() < readyAt) return;
+      const dy = touchY - e.touches[0].clientY; // 正值 = 手指上滑（页面向下）
+      if (dy > TOUCH_SLACK && nextPath && touchEdge.bottom && atBottom()) {
+        const p = (dy - TOUCH_SLACK) / TOUCH_THRESHOLD;
+        render('down', p);
+        if (p >= 1) go('down');
+      } else if (-dy > TOUCH_SLACK && prevPath && touchEdge.top && atTop()) {
+        const p = (-dy - TOUCH_SLACK) / TOUCH_THRESHOLD;
+        render('up', p);
+        if (p >= 1) go('up');
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+      touchY = null;
+      if (!navigating) { reset('down'); reset('up'); }
+    }, { passive: true });
   });
 </script>
 
@@ -72,14 +175,85 @@ const nextPage = currentIndex < pages.length - 1 ? pages[currentIndex + 1] : nul
 
   .page-scroll-hint__arrow {
     font-size: 1.25rem;
-    color: #c1c1c1;
+    color: var(--ink-faint);
     animation: arrow-pulse 2.4s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
   }
 
   .page-scroll-hint__label {
     font-size: 0.75rem;
-    color: #6a6a6a;
+    color: var(--ink-soft);
     letter-spacing: 0.1em;
+  }
+
+  /* 充能进度条 */
+  .page-scroll-hint__progress {
+    width: 7rem;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--line);
+    overflow: hidden;
+    margin-top: 0.3rem;
+  }
+
+  .page-scroll-hint__progress-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--brand-grad);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 120ms linear;
+  }
+
+  /* 顶部"返回上一页"胶囊 */
+  .page-edge-pill {
+    position: fixed;
+    top: calc(0.9rem + env(safe-area-inset-top, 0px));
+    left: 50%;
+    transform: translateX(-50%) translateY(-12px);
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 2rem;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    box-shadow: rgba(0,0,0,0.08) 0 4px 14px;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 60;
+    transition: opacity 200ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .page-edge-pill--visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .page-edge-pill__arrow {
+    color: var(--brand-text);
+    font-size: 0.85rem;
+  }
+
+  .page-edge-pill__progress {
+    width: 3.5rem;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--line);
+    overflow: hidden;
+  }
+
+  .page-edge-pill__progress-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--brand-grad);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 120ms linear;
   }
 
   @keyframes arrow-pulse {

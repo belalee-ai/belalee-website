@@ -10,7 +10,7 @@ interface Props {
 const { items } = Astro.props;
 ---
 
-<div class="relative pl-8 border-l-2 border-[#c1c1c1]">
+<div class="relative pl-8 border-l-2 border-[color:var(--ink-faint)]">
   {items.map((item, i) => (
     <div class={`relative pb-8 ${i === items.length - 1 ? 'pb-0' : ''}`}>
       <div class="absolute -left-[25px] w-4 h-4 rounded-full border-2 border-base-100" style="background: var(--brand-grad);"></div>

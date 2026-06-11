@@ -1,0 +1,93 @@
+<button id="back-to-top" class="back-to-top" aria-label="回到顶部" title="回到顶部">
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+</button>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+
+    // 本站滚动可能发生在 window 或 .drawer-content（daisyUI drawer 布局），两边都接管
+    const drawer = document.querySelector('.drawer-content');
+    const threshold = () => window.innerHeight * 1.5;
+
+    const scrolled = () =>
+      Math.max(
+        window.scrollY || 0,
+        document.documentElement.scrollTop || 0,
+        drawer ? drawer.scrollTop : 0
+      );
+
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      btn.classList.toggle('back-to-top--visible', scrolled() > threshold());
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    drawer?.addEventListener('scroll', onScroll, { passive: true });
+    update();
+
+    btn.addEventListener('click', () => {
+      const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth';
+      window.scrollTo({ top: 0, behavior });
+      drawer?.scrollTo({ top: 0, behavior });
+    });
+  });
+</script>
+
+<style>
+  .back-to-top {
+    position: fixed;
+    /* 44px 触控目标 + iPhone 底部横条安全区 */
+    right: calc(1.1rem + env(safe-area-inset-right, 0px));
+    bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    border: none;
+    background: var(--brand-grad);
+    color: var(--ink-on-brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 40;
+    box-shadow: rgba(0, 0, 0, 0.12) 0 4px 14px, rgb(var(--brand-text-rgb) / 0.25) 0 2px 8px;
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+    pointer-events: none;
+    transition: opacity 250ms cubic-bezier(0.25, 0.1, 0.25, 1),
+      transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1),
+      background-color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .back-to-top--visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .back-to-top:hover {
+    filter: brightness(0.94) saturate(1.1);
+    transform: translateY(-2px) scale(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top {
+      transition: opacity 0.01ms;
+      transform: none;
+    }
+    .back-to-top--visible {
+      transform: none;
+    }
+  }
+</style>

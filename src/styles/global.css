@@ -1,17 +1,27 @@
-/* Brand color tokens — Sunset Lite palette
+/* Brand color tokens — Lemon Zest palette (柠檬黄绿，取自小红书封面)
    --brand-grad     : gradient for backgrounds (hero CTA, lab pills, carousel arrow hover, ring glow)
-   --brand-text     : solid rose for text / borders / small dots on white
+   --brand-text     : solid deep green for text / borders / small dots on white (WCAG AA on white)
    --brand-text-rgb : same color as space-separated rgb channels, for rgb(... / alpha) tints
-   --brand-deep     : deeper rose for hover states and gradient bar ends
+   --brand-deep     : deeper green for hover states and gradient bar ends
    --ink-on-brand   : dark text color sitting on top of the light gradient
    --brand-card     : very pale tint of the gradient for card backgrounds on white pages */
 :root {
-  --brand-grad: linear-gradient(135deg, #ffa6ce, #ffae72);
-  --brand-text: #c8537a;
-  --brand-text-rgb: 200 83 122;
-  --brand-deep: #a8446c;
-  --ink-on-brand: #4a1f30;
-  --brand-card: linear-gradient(135deg, #ffe6f1, #ffe8dc);
+  --brand-grad: linear-gradient(135deg, #d4f23f, #8fd14f);
+  --brand-text: #4d7c0f;
+  --brand-text-rgb: 77 124 15;
+  /* 亮柠檬绿 — 只用于装饰（徽章底、边框条、进度条、背景 tint），不当文字色用 */
+  --brand-bright: #8fd14f;
+  --brand-bright-rgb: 143 209 79;
+  --brand-deep: #3f6212;
+  --ink-on-brand: #2b3d0f;
+  --brand-card: linear-gradient(135deg, #f7fce0, #ecf7dd);
+
+  /* Neutral tokens — 全站统一灰阶（换主题时不用再逐个文件改灰色） */
+  --ink: #222222;
+  --ink-soft: #6a6a6a;
+  --ink-faint: #c1c1c1;
+  --line: #e5e5e5;
+  --surface: #f2f2f2;
 }
 
 /* Timeline last-child fix */
@@ -59,6 +69,162 @@ h1, h2, h3, .text-3xl, .text-4xl {
   border-radius: 32px;
   padding: 4.25rem 2rem 3.75rem;
   box-shadow: rgba(0,0,0,0.04) 0px 0px 0px 1px, rgba(0,0,0,0.03) 0px 4px 16px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ── Hero 柠檬气泡点缀 ──
+   三层结构分工（互不抢 transform）：
+   外层 .hero-orb     吃鼠标视差（--mx/--my × 各自景深系数）
+   中层 b             横向漂移动画
+   内层 i             纵向浮动 + 呼吸缩放（气泡本体）
+   各动画周期互质（7/9/11/13s），轨迹永不重复 → 飘而不是摆 */
+.hero-deco {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.hero-deco > span {
+  position: absolute;
+  display: block;
+  transform: translate(calc(var(--mx, 0px) * var(--pf, 0)), calc(var(--my, 0px) * var(--pf, 0)));
+  transition: transform 700ms cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.hero-deco b,
+.hero-deco i {
+  display: block;
+  font-style: normal;
+  font-weight: inherit;
+}
+
+/* 气泡本体：高光 + 渐变的半透明小球，果汽感 */
+.hero-orb i {
+  border-radius: 50%;
+  background: radial-gradient(circle at 31% 28%,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.35) 18%,
+    rgb(var(--brand-bright-rgb) / 0.38) 52%,
+    rgb(var(--brand-text-rgb) / 0.20) 100%);
+  border: 1px solid rgb(var(--brand-bright-rgb) / 0.5);
+  box-shadow:
+    inset -4px -5px 8px rgb(var(--brand-text-rgb) / 0.10),
+    inset 3px 4px 6px rgba(255, 255, 255, 0.55),
+    0 6px 16px rgb(var(--brand-text-rgb) / 0.08);
+}
+
+/* 五颗气泡：大小/位置/景深/模糊各不同，大的糊在后、小的清晰在前 */
+.hero-orb--1 { top: 14%; left: 9%;  --pf: 0.05; }
+.hero-orb--1 i { width: 56px; height: 56px; filter: blur(1.5px); opacity: 0.65;
+  animation: orbBob 11s ease-in-out infinite; }
+.hero-orb--1 b { animation: orbDrift 13s ease-in-out infinite; }
+
+.hero-orb--2 { top: 30%; right: 7%;  --pf: 0.09; }
+.hero-orb--2 i { width: 30px; height: 30px;
+  animation: orbBob 7s ease-in-out 0.8s infinite; }
+.hero-orb--2 b { animation: orbDrift 9s ease-in-out 1.5s infinite; }
+
+.hero-orb--3 { bottom: 14%; left: 19%; --pf: 0.03; }
+.hero-orb--3 i { width: 72px; height: 72px; filter: blur(2.5px); opacity: 0.5;
+  animation: orbBob 13s ease-in-out 2s infinite; }
+.hero-orb--3 b { animation: orbDrift 11s ease-in-out 0.5s infinite; }
+
+.hero-orb--4 { top: 60%; right: 16%; --pf: 0.07; }
+.hero-orb--4 i { width: 20px; height: 20px;
+  animation: orbBob 9s ease-in-out 1.2s infinite; }
+.hero-orb--4 b { animation: orbDrift 7s ease-in-out 2.4s infinite; }
+
+.hero-orb--5 { top: 12%; right: 27%; --pf: 0.04; }
+.hero-orb--5 i { width: 14px; height: 14px; opacity: 0.8;
+  animation: orbBob 8s ease-in-out 0.4s infinite; }
+.hero-orb--5 b { animation: orbDrift 10s ease-in-out 1.8s infinite; }
+
+/* 留一颗十字和梨彩蛋呼应封面 */
+.hero-deco__cross { top: 66%; left: 6%; --pf: 0.06; }
+.hero-deco__cross b {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: rgb(var(--brand-text-rgb) / 0.30);
+  animation: orbSpinBob 12s ease-in-out infinite;
+}
+
+.hero-deco__pear { bottom: 11%; right: 8%; --pf: 0.05; }
+.hero-deco__pear b {
+  font-size: 1.5rem;
+  opacity: 0.22;
+  animation: pearSway 6.5s ease-in-out infinite;
+  transform-origin: 50% 88%;
+}
+
+/* 内层：纵向浮 + 呼吸（幅度随相位变化，不是机械直线） */
+@keyframes orbBob {
+  0%, 100% { transform: translateY(0) scale(1); }
+  33%      { transform: translateY(-14px) scale(1.05); }
+  66%      { transform: translateY(-5px) scale(0.97); }
+}
+
+/* 中层：横向漂（带一点下沉，路径成环不成线） */
+@keyframes orbDrift {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(18px) translateY(3px); }
+}
+
+@keyframes orbSpinBob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-12px) rotate(90deg); }
+}
+
+@keyframes pearSway {
+  0%, 100% { transform: rotate(-7deg) translateY(0); }
+  50%      { transform: rotate(9deg) translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-deco b,
+  .hero-deco i {
+    animation: none !important;
+  }
+  .hero-deco > span {
+    transition: none;
+  }
+}
+
+/* 手机上收敛：留 3 颗靠边的气泡 + 梨，去掉中间区域的 */
+@media (max-width: 640px) {
+  .hero-deco > .hero-orb--4,
+  .hero-deco > .hero-orb--5,
+  .hero-deco > .hero-deco__cross {
+    display: none;
+  }
+  .hero-orb--1 i { width: 38px; height: 38px; }
+  .hero-orb--3 i { width: 48px; height: 48px; }
+  .hero-deco__pear b { font-size: 1.15rem; }
+}
+
+/* ── 全站背景细点阵 — 极淡瑞士点阵铺满内容区，消除大片空白的空洞感 ── */
+.drawer-content {
+  background-image: radial-gradient(circle, rgb(var(--brand-text-rgb) / 0.055) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+/* ── 区块标题装饰 — 柠檬绿小方块前缀，全站统一节奏 ── */
+.home-section__title::before,
+.cv-section__title::before,
+.tk-cat__title::before,
+.case-section__title::before {
+  content: '';
+  display: inline-block;
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 2px;
+  background: var(--brand-grad);
+  margin-right: 0.5em;
+  vertical-align: baseline;
 }
 
 .hero-gradient h1 {
@@ -87,18 +253,177 @@ h1, h2, h3, .text-3xl, .text-4xl {
   transform: translateY(-1px);
 }
 
-/* Home sections layout */
-.home-sections {
+/* 数据大字报 — 柔和绿卡片版（首页 hero 下方） */
+.home-stats {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 1.5rem;
+  /* 与 hero 同款的浅柠檬绿卡片底 */
+  background: var(--brand-card);
+  border-radius: 24px;
+  padding: 0.5rem 0.5rem;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* 点缀①：右上角瑞士风网格点阵 */
+.home-stats::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 42%;
+  height: 100%;
+  background-image: radial-gradient(circle, rgb(var(--brand-text-rgb) / 0.16) 1.1px, transparent 1.1px);
+  background-size: 15px 15px;
+  -webkit-mask-image: linear-gradient(255deg, #000 8%, transparent 62%);
+  mask-image: linear-gradient(255deg, #000 8%, transparent 62%);
+  opacity: 0.6;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 点缀②：左下角亮绿渐变光晕 */
+.home-stats::after {
+  content: '';
+  position: absolute;
+  bottom: -40%;
+  left: -8%;
+  width: 45%;
+  height: 130%;
+  background: radial-gradient(closest-side, rgb(var(--brand-bright-rgb) / 0.30), transparent);
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(6px);
+}
+
+.home-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.25rem 1.1rem 1.15rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* 分隔线：柔和绿调，不再是黑/灰硬线 */
+.home-stat:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 22%;
+  right: 0;
+  width: 1px;
+  height: 56%;
+  background: linear-gradient(180deg, transparent, rgb(var(--brand-text-rgb) / 0.18), transparent);
+}
+
+/* 点缀③：每格顶部亮绿短线，登场时从 0 展开 */
+.home-stat::before {
+  content: '';
+  position: absolute;
+  top: 0.7rem;
+  left: 1.1rem;
+  width: 1.6rem;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--brand-grad);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: statLineGrow 0.55s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.home-stat:nth-child(1)::before { animation-delay: 0.05s; }
+.home-stat:nth-child(2)::before { animation-delay: 0.15s; }
+.home-stat:nth-child(3)::before { animation-delay: 0.25s; }
+.home-stat:nth-child(4)::before { animation-delay: 0.35s; }
+
+@keyframes statLineGrow {
+  to { transform: scaleX(1); }
+}
+
+.home-stat__num {
+  font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+  font-size: 2.05rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  margin-top: 0.55rem;
+  /* 始终是渐变文字：把渐变拉宽到 200%，默认露左半段(深绿)，
+     hover 平移 background-position 把右半段(亮绿)扫过来 —— 丝滑流光，不闪切 */
+  background: linear-gradient(90deg,
+    var(--brand-deep) 0%,
+    var(--brand-deep) 30%,
+    var(--brand-text) 50%,
+    var(--brand-bright) 78%,
+    #d4f23f 100%);
+  background-size: 220% 100%;
+  background-position: 0% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  transition: background-position 600ms cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* hover 单格：渐变平移，亮绿那半段扫到数字上 */
+.home-stat:hover .home-stat__num {
+  background-position: 100% 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stat__num {
+    transition: none;
+  }
+}
+
+.home-stat__label {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stat::before {
+    animation: none;
+    transform: scaleX(1);
+  }
 }
 
 @media (max-width: 768px) {
-  .home-sections {
-    grid-template-columns: 1fr;
+  .home-stats {
+    grid-template-columns: repeat(2, 1fr);
+    border-radius: 20px;
+  }
+
+  .home-stat {
+    padding: 1rem 0.85rem 0.9rem;
+  }
+
+  /* 竖分隔线只保留奇数列右侧 */
+  .home-stat:nth-child(2n)::after {
+    display: none;
+  }
+
+  /* 下排顶部补一条横向柔和分隔 */
+  .home-stat:nth-child(n + 3) {
+    border-top: 1px solid rgb(var(--brand-text-rgb) / 0.10);
+  }
+
+  .home-stat__num {
+    font-size: 1.55rem;
   }
 }
+
+/* Home sections layout */
+.home-sections {
+  display: grid;
+  /* minmax(0,1fr)：防止轮播 min-width:100% 的幻灯片把列的最小宽度撑爆（grid blowout） */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2rem;
+}
+
 
 .home-section__header {
   display: flex;
@@ -110,12 +435,12 @@ h1, h2, h3, .text-3xl, .text-4xl {
 .home-section__title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #222222;
+  color: var(--ink);
 }
 
 .home-section__more {
   font-size: 0.75rem;
-  color: #6a6a6a;
+  color: var(--ink-soft);
   text-decoration: none;
   transition: color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
@@ -127,6 +452,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 /* Home carousel */
 .home-carousel {
   position: relative;
+  min-width: 0;
   overflow: hidden;
   border: 1px solid rgba(0,0,0,0.08);
   border-radius: 20px;
@@ -158,8 +484,8 @@ h1, h2, h3, .text-3xl, .text-4xl {
   height: 2.75rem;
   border-radius: 50%;
   border: none;
-  background: #f2f2f2;
-  color: #222222;
+  background: var(--surface);
+  color: var(--ink);
   font-size: 1.35rem;
   cursor: pointer;
   display: flex;
@@ -175,6 +501,14 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 .home-carousel:hover .carousel-arrow {
   opacity: 1;
+}
+
+/* 触屏设备没有 hover，箭头常驻半透明显示（也可以左右滑动切换） */
+@media (hover: none) {
+  .carousel-arrow {
+    opacity: 0.55;
+    background: rgba(255, 255, 255, 0.85);
+  }
 }
 
 .carousel-arrow:hover {
@@ -202,7 +536,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
   height: 8px;
   border-radius: 50%;
   border: none;
-  background: #e5e5e5;
+  background: var(--line);
   cursor: pointer;
   transition: background-color 250ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1), border-radius 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
   padding: 8px;
@@ -223,7 +557,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 .home-lab-card__cover {
   height: 7rem;
   overflow: hidden;
-  background: #f2f2f2;
+  background: var(--surface);
 }
 
 .home-lab-card__cover img {
@@ -237,7 +571,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  background: #f2f2f2;
+  background: var(--surface);
 }
 
 .home-lab-card__body {
@@ -254,20 +588,20 @@ h1, h2, h3, .text-3xl, .text-4xl {
 }
 
 .home-lab-card__status--soon {
-  background: #f2f2f2;
-  color: #6a6a6a;
+  background: var(--surface);
+  color: var(--ink-soft);
 }
 
 .home-lab-card__title {
   font-size: 1rem;
   font-weight: 600;
-  color: #222222;
+  color: var(--ink);
   margin-top: 0.45rem;
 }
 
 .home-lab-card__desc {
   font-size: 0.8rem;
-  color: #6a6a6a;
+  color: var(--ink-soft);
   margin-top: 0.25rem;
   line-height: 1.5;
 }
@@ -280,8 +614,8 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 .home-lab-card__tools span {
   font-size: 0.625rem;
-  color: #6a6a6a;
-  background: #f2f2f2;
+  color: var(--ink-soft);
+  background: var(--surface);
   padding: 0.08rem 0.35rem;
   border-radius: 0.2rem;
 }
@@ -315,7 +649,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 .home-insight-num {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #c1c1c1;
+  color: var(--ink-faint);
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
   width: 1.2rem;
@@ -323,21 +657,30 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 .home-insight-badge {
   font-size: 0.625rem;
-  font-weight: 500;
-  color: #222222;
-  background: #f2f2f2;
+  font-weight: 600;
+  /* 品牌绿：深绿字保可读 + 亮柠檬绿淡底，白底上一眼是"我的颜色" */
+  color: var(--brand-text);
+  background: rgb(var(--brand-bright-rgb) / 0.18);
   padding: 0.12rem 0.45rem;
   border-radius: 0.25rem;
   flex-shrink: 0;
   min-width: 2.8rem;
   text-align: center;
+  transition: background 250ms cubic-bezier(0.25, 0.1, 0.25, 1), color 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* 选中态：hover 整条时标签填满亮绿渐变，从"淡标签"变"实心高亮" */
+.home-insight-item:hover .home-insight-badge {
+  background: var(--brand-grad);
+  color: var(--ink-on-brand);
 }
 
 .home-insight-title {
   font-size: 0.95rem;
-  color: #222222;
+  color: var(--ink);
   font-weight: 500;
   flex: 1;
+  min-width: 0; /* 允许标题在 flex 容器里收缩，省略号才生效、不顶破宽度 */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -359,7 +702,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 .home-insights-more {
   font-size: 0.75rem;
-  color: #6a6a6a;
+  color: var(--ink-soft);
   text-decoration: none;
   transition: color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
@@ -416,7 +759,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 .card-tag-link {
   font-size: 0.75rem;
-  color: #6a6a6a;
+  color: var(--ink-soft);
   text-decoration: none;
   transition: color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
@@ -427,13 +770,13 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 .card-tag-sep {
   font-size: 0.625rem;
-  color: #c1c1c1;
+  color: var(--ink-faint);
 }
 
 /* Card hover effects — three-layer shadow */
 .collapse {
   transition: box-shadow 250ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--line);
 }
 
 .collapse:hover {
@@ -443,7 +786,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 
 /* Timeline enhanced dots */
 .timeline-dot {
-  box-shadow: 0 0 0 4px #f2f2f2;
+  box-shadow: 0 0 0 4px var(--surface);
   transition: box-shadow 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
@@ -456,7 +799,7 @@ h1, h2, h3, .text-3xl, .text-4xl {
 .contact-card:hover {
   transform: translateY(-2px);
   box-shadow: rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px;
-  border-color: #e5e5e5;
+  border-color: var(--line);
 }
 
 /* Blog card links subtle hover */
@@ -490,7 +833,7 @@ a:hover .card {
   position: absolute;
   inset: 2.5px;
   border-radius: 50%;
-  background: linear-gradient(180deg, #ffffff, #f2f2f2);
+  background: linear-gradient(180deg, #ffffff, var(--surface));
 }
 
 .avatar-entrance {
@@ -548,7 +891,7 @@ a:hover .card {
 .sidebar-icon {
   display: flex;
   align-items: center;
-  color: #6a6a6a;
+  color: var(--ink-soft);
   transition: color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
@@ -579,7 +922,7 @@ a:hover .card {
 }
 
 .sidebar-bg .menu a.sidebar-active {
-  background: rgb(var(--brand-text-rgb) / 0.10);
+  background: rgb(var(--brand-bright-rgb) / 0.22);
   color: var(--brand-text);
   font-weight: 500;
 }
@@ -587,6 +930,19 @@ a:hover .card {
 /* Badge refinement */
 .badge-outline {
   border-width: 1.5px;
+}
+
+/* 滚动逐节登场 — JS 给视野外元素加 .reveal，进入视野时加 .reveal-in（错峰 delay 由 JS 内联） */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 550ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 550ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Smooth scroll & prevent overscroll bounce */
@@ -624,9 +980,9 @@ html, body {
 }
 
 @media (max-width: 768px) {
-  /* Home two-column → single column */
+  /* Home two-column → single column；minmax(0,1fr) 防止内容撑破单列 */
   .home-sections {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
   }
 
