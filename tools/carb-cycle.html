@@ -156,7 +156,20 @@
   .macros div:last-child { border-right: none; }
   .macros .g { font-size: 20px; font-weight: 800; }
   .macros .lbl { font-size: 11px; color: #666; letter-spacing: 1px; }
+  .macros .coef { font-size: 10.5px; color: var(--green-deep); font-weight: 700; margin-top: 2px; }
   .macros .carb { background: linear-gradient(180deg, var(--lime-1), var(--lime-2)); }
+  .delta {
+    margin: 8px 14px 0;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 6px 10px;
+    border: 2px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+  }
+  .delta.plus  { background: var(--lime-1); }
+  .delta.minus { background: var(--ink); color: var(--lime-1); }
+  .delta.base  { background: var(--paper); color: #666; font-weight: 600; border-style: dashed; }
   .sweet {
     margin: 10px 14px 0;
     font-size: 12.5px;
@@ -372,6 +385,9 @@ function render() {
   // 7 张日卡
   const week = document.getElementById('week');
   const results = [];
+  const w = +state.weight;
+  const midC = dayCalc(state, 'cardio').C;   // 以中碳日为基准，标每天碳水的增减
+  const coef = (g) => (g / w).toFixed(1);
   week.innerHTML = DAYS.map((d, i) => {
     const type = state.restToday[i] ? 'rest' : state.plan[i];
     const r = dayCalc(state, type);
@@ -391,10 +407,11 @@ function render() {
         <span class="ttype">${state.restToday[i] ? '😴 临时休息' : TYPE_NAME[type]}</span>
       </div>
       <div class="macros">
-        <div class="carb"><div class="g">${r.C}g</div><div class="lbl">碳水</div></div>
-        <div><div class="g">${r.P}g</div><div class="lbl">蛋白质</div></div>
-        <div><div class="g">${r.F}g</div><div class="lbl">脂肪</div></div>
+        <div class="carb"><div class="g">${r.C}g</div><div class="lbl">碳水</div><div class="coef">${coef(r.C)}× 体重</div></div>
+        <div><div class="g">${r.P}g</div><div class="lbl">蛋白质</div><div class="coef">${coef(r.P)}× 体重</div></div>
+        <div><div class="g">${r.F}g</div><div class="lbl">脂肪</div><div class="coef">${coef(r.F)}× 体重</div></div>
       </div>
+      ${carbDelta(r.C, midC)}
       ${sweetBox}${lowHint}
       <details>
         <summary>怎么吃（示例，可按克数自由替换）</summary>
@@ -422,6 +439,14 @@ function render() {
     ${goalCell(loss)}`;
 
   bindEvents();
+}
+
+/* 碳水增减标注：以中碳日为基准（一眼看出今天多吃/少吃多少碳水） */
+function carbDelta(c, midC) {
+  const d = Math.round(c - midC);
+  if (Math.abs(d) < 5) return `<div class="delta base"><span>碳水基准日</span><span>中碳 = 0</span></div>`;
+  if (d > 0) return `<div class="delta plus"><span>碳水比中碳日多吃</span><span>+${d}g ↑</span></div>`;
+  return `<div class="delta minus"><span>碳水比中碳日少吃</span><span>−${-d}g ↓</span></div>`;
 }
 
 /* 目标体重预估：纯脂肪口径，第一周另有 0.5-1kg 糖原水分先掉（秤上更快） */
